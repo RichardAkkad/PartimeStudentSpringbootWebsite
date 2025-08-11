@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Average Grade Results</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #000000;
+      text-align: center;
+    }
+    h3 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .no-data-message {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<a href="/index" style="text-decoration: none; margin-top: 40px; margin-left: 20px; display: block;">Back to Homepage</a>
+
+<div class="container">
+  <h1>Average Grade Results</h1>
+  <h3 th:text="${averageMessage}"></h3>
+
+  <!-- Chart will be displayed here -->
+  <div class="chart-container">
+    <canvas id="gradeChart"></canvas>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  // Get the message from Thymeleaf
+  var message = /*[[${averageMessage}]]*/ "the average grade for Mathematics is 85";
+
+  // Extract course and average grade and create chart data
+  function createPieChart() {
+    var ctx = document.getElementById('gradeChart').getContext('2d');
+
+    // Check if the message contains "unfortunately" or no data (if you want to handle no data case)
+    if (message.includes('unfortunately') || message.includes('no students')) {
+      // Hide the chart and show a message
+      document.querySelector('.chart-container').innerHTML =
+        '<div class="no-data-message">No data available to display chart</div>';
+      return;
+    }
+
+    // Extract average grade from message (e.g., "the average grade for this Mathematics is 85")
+    var gradeMatch = message.match(/is (\d+)/);
+    var averageGrade = gradeMatch ? parseInt(gradeMatch[1]) : 0;
+
+    // Extract course from message
+    var courseMatch = message.match(/for (\w+)/);
+    var course = courseMatch ? courseMatch[1] : 'course';
+
+    // Create grade distribution based on average
+    // Convert grade to percentage (assuming grades are out of 100)
+    var gradePercentage = averageGrade; // If grades are already out of 100
+    var remainingPercentage = 100 - gradePercentage;
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: [
+          course + ' Average: ' + averageGrade + '%',
+          'Remaining: ' + remainingPercentage + '%'
+        ],
+        datasets: [{
+          data: [gradePercentage, remainingPercentage],
+          backgroundColor: [
+            '#3498db',  // Blue for the average grade
+            '#95a5a6'   // Gray for remaining percentage
+          ],
+          borderColor: [
+            '#2980b9',
+            '#7f8c8d'
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 20,
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.label + ': ' + context.parsed + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Create the chart when the page loads
+  document.addEventListener('DOMContentLoaded', createPieChart);
+</script>
+
+</body>
+</html>

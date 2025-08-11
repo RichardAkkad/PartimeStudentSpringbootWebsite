@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 5px;
+    }
+    .content {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .btn {
+        padding: 10px 15px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+    .btn:hover {
+        background-color: #2980b9;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%;
+        display: flex;
+        flex-direction: row; /* Changed to row for horizontal alignment */
+        align-items: center; /* Center items vertically */
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0; /* Remove bottom margin since we're using horizontal layout */
+        margin-right: 10px; /* Add right margin for spacing */
+        font-weight: bold;
+        width: 30%;
+        text-align: left;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"] {
+        width: 30%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+    .form-group input[type="text"] {
+        text-transform: lowercase; /* Shows lowercase as user types */
+    }
+    .form-group input[type="text"]:focus,
+    .form-group input[type="number"]:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+    .save-button-container {
+        margin-top: 20px;
+        width: 30%;
+        display: flex;
+        justify-content: center;
+        margin-left: calc(30% + 10px); /* Align with input fields */
+    }
+
+    .form-section {
+        width: 100%;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+<a href="/index" style="text-decoration: none; margin-top: 40px; margin-left: 20px; display: block;">Back to Homepage</a>
+<div class="container">
+  <div class="content">
+    <h2>Search Student</h2>
+
+    <!-- Search by Student ID -->
+    <div class="form-section">
+      <form th:action="@{/SearchStudent}" method="post" style="width: 100%;">
+        <div class="form-group">
+          <label for="id">Student ID:</label>
+          <input type="number" id="id" name="id" min="1" required/>
+        </div>
+        <div class="save-button-container">
+          <button type="submit" class="btn">Search by ID</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Search by Age Range -->
+    <div class="form-section">
+      <form th:action="@{/SearchStudentByAgeRange}" method="post" style="width: 100%;">
+        <div class="form-group">
+          <label for="MinAge">Min Age:</label>
+          <input type="number" id="MinAge" name="MinAge" min="1" required/>
+        </div>
+        <div class="form-group">
+          <label for="MaxAge">Max Age:</label>
+          <input type="number" id="MaxAge" name="MaxAge" min="1" required/>
+        </div>
+        <div class="form-group">
+          <label for="MinGrade">Min Grade:</label>
+          <input type="number" id="MinGrade" name="MinGrade" min="1" required/>
+        </div>
+        <div class="form-group">
+          <label for="MaxGrade">Max Grade:</label>
+          <input type="number" id="MaxGrade" name="MaxGrade" min="1" required/>
+        </div>
+
+        <div class="form-group">
+          <label for="Course">Course:</label>
+          <input type="text" id="Course" name="Course" min="1" required/>
+        </div>
+        <div class="save-button-container">
+          <button type="submit" class="btn">Search by Age Range</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Get all text input fields
+      const textInputs = document.querySelectorAll('input[type="text"]');
+
+      textInputs.forEach(function(input) {
+          input.addEventListener('input', function() {
+              this.value = this.value.toLowerCase(); // Ensures actual value is lowercase
+          });
+      });
+  });
+</script>
+
+</body>
+</html>

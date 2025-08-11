@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Range Percentage Results</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #3498db;
+      text-align: center;
+    }
+    h3 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .no-data-message {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<a href="/index" style="text-decoration: none; margin-top: 40px; margin-left: 20px; display: block;">Back to Homepage</a>
+
+<div class="container">
+  <h1>Age Range Percentage Results</h1>
+  <h3 th:text="${agePercentageMessage}"></h3>
+
+  <!-- Chart will be displayed here -->
+  <div class="chart-container">
+    <canvas id="ageChart"></canvas>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  // Get the message from Thymeleaf
+  var message = /*[[${agePercentageMessage}]]*/ "Sample message";
+
+  // Extract percentage and create chart data
+  function createPieChart() {
+    var ctx = document.getElementById('ageChart').getContext('2d');
+
+    // Check if the message contains "unfortunately" (no data case)
+    if (message.includes('unfortunately')) {
+      // Hide the chart and show a message
+      document.querySelector('.chart-container').innerHTML =
+        '<div class="no-data-message">No data available to display chart</div>';
+      return;
+    }
+
+    // Extract percentage from message (e.g., "50% of the students...")
+    var percentageMatch = message.match(/(\d+)%/);
+    var percentage = percentageMatch ? parseInt(percentageMatch[1]) : 0;
+    var remainingPercentage = 100 - percentage;
+
+    // Extract age from message
+    var ageMatch = message.match(/under the age of (\d+)/);
+    var age = ageMatch ? ageMatch[1] : 'specified age';
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: [
+          'Students ' + age + ' or under',
+          'Students over ' + age
+        ],
+        datasets: [{
+          data: [percentage, remainingPercentage],
+          backgroundColor: [
+            '#3498db',  // Blue for students under the specified age
+            '#e74c3c'   // Red for students over the specified age
+          ],
+          borderColor: [
+            '#2980b9',
+            '#c0392b'
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 20,
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.label + ': ' + context.parsed + '%';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Create the chart when the page loads
+  document.addEventListener('DOMContentLoaded', createPieChart);
+</script>
+
+</body>
+</html>

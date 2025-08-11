@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roommate Search Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .results-container {
+            padding: 40px;
+        }
+
+        .results-header {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .email-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .email-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .email-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .email-item:before {
+            content: '📧';
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            padding: 60px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .no-results p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .no-results p:first-child {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+        }
+
+        .results-count {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .results-container {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .email-item {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎯 Search Results</h1>
+        <p>Here are the roommates that match your criteria</p>
+    </div>
+
+    <div class="results-container">
+        <!-- Results count (when there are results) -->
+        <div class="results-count" th:if="${list != null and !list.isEmpty()}">
+            <span th:text="'Found ' + ${list.size()} + ' matching roommate(s)'"></span>
+        </div>
+
+        <h2 class="results-header">
+            <span>📧 Matching Roommate Emails</span>
+        </h2>
+
+        <!-- Email results list -->
+        <ul class="email-list" th:if="${list != null and !list.isEmpty()}">
+            <li class="email-item" th:each="email : ${list}">
+                <span th:text="${email}"></span>
+            </li>
+        </ul>
+
+        <!-- No results message -->
+        <div class="no-results" th:if="${list == null or list.isEmpty()}">
+            <p>😔 No roommates found matching your criteria</p>
+            <p>Try adjusting your search parameters and search again.</p>
+            <p style="font-size: 0.9rem; color: #888; margin-top: 20px;">
+                Consider widening your age range, budget, or being more flexible with lifestyle preferences.
+            </p>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-buttons">
+            <a href="/FindRoommate" class="btn">
+                🔍 Search Again
+            </a>
+            <a href="/index" class="btn btn-secondary">
+                🏠 Back to Homepage
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

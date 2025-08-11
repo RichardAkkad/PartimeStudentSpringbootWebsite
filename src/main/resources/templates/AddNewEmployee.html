@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 5px;
+    }
+    .content {
+        margin-top: 20px;
+        display: flex; /* Use flexbox for layout */
+        flex-direction: column; /* Stack items vertically by default */
+        align-items: center; /* Center items horizontally */
+    }
+    .btn {
+        padding: 10px 15px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+    .btn:hover {
+        background-color: #2980b9;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%; /* Make form groups take full width of container */
+        display: flex; /* Use flexbox to arrange label and input */
+        flex-direction: column;
+        align-items: flex-start; /* Align items to the start (top in column direction) */
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        width: 30%; /* Label width */
+    }
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group select {
+        width: 30%; /* Input width set to one-third */
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        transition: border-color 0.3s; /* Smooth transition for focus effect */
+    }
+    .form-group input[type="text"]:focus,
+    .form-group input[type="password"]:focus,
+    .form-group select:focus {
+        outline: none; /* Remove the default outline */
+        border-color: #3498db; /* Change border color on focus */
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Add a subtle shadow */
+    }
+
+    .save-button-container {
+        margin-top: 20px;
+        width: 30%; /* keep button aligned with input fields */
+        display: flex;
+        justify-content: center; /* Center the button horizontally within the container */
+    }
+  </style>
+</head>
+<body>
+<a href="/index" style="text-decoration: none; margin-top: 40px; margin-left: 20px; display: block;">Back to Homepage</a>
+
+<div class="container">
+
+  <div class="content">
+    <h2>Add New Employee</h2>
+    <form th:action="@{/SaveEmployee}" method="post" th:object="${request}" style="width: 100%;">
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" th:field="*{firstName}" id="firstName" required/>
+      </div>
+      <div class="form-group">
+        <label for="surname">Surname:</label>
+        <input type="text" th:field="*{surname}" id="surname" required/>
+      </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" th:field="*{username}" id="username" required/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="text" th:field="*{password}" id="password" required/>
+      </div>
+      <div class="form-group">
+        <label for="role">Role:</label>
+        <select th:field="*{role}" id="role" required>
+          <option value="">Select Role</option>
+          <option value="ADMIN">Admin</option>
+          <option value="TEACHER">Teacher</option>
+          <option value="STAFF">Staff</option>
+          <option value="STUDENT">Student</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="Department">Department:</label>
+        <input type="text" th:field="*{department}" id="department" required/>
+      </div>
+
+      <div class="save-button-container">
+        <button type="submit" class="btn">Save</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+</body>
+</html>
