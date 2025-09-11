@@ -1,0 +1,509 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set Your Study Availability</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    .form-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        color: #333;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-style: italic;
+    }
+
+    .day-section {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fafafa;
+    }
+
+    .day-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .day-label {
+        width: 120px;
+        font-weight: bold;
+        color: #333;
+        font-size: 16px;
+    }
+
+    .available-checkbox {
+        margin-right: 15px;
+    }
+
+    .slots-container {
+        margin-left: 20px;
+    }
+
+    .slot-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        border: 1px solid #e8e8e8;
+    }
+
+    .slot-label {
+        width: 80px;
+        font-weight: 500;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .time-inputs {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+    }
+
+    .time-inputs input[type="time"] {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .time-inputs input[type="time"]:disabled {
+        background-color: #f0f0f0;
+        color: #999;
+    }
+
+    .to-label {
+        color: #666;
+        font-weight: bold;
+    }
+
+    .course-section {
+        margin: 30px 0;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .course-section h3 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    select, input[type="text"] {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .submit-section {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .submit-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .cancel-btn {
+        background-color: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .cancel-btn:hover {
+        background-color: #545b62;
+    }
+
+    .time-hint {
+        font-size: 12px;
+        color: #666;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .slots-disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <h2>Set Your Study Availability</h2>
+  <p class="subtitle">Let other students know when you're available for group study sessions (up to 3 time slots per day)</p>
+
+  <form id="availabilityForm" th:object="${studentavailability}" method="post" th:action="@{/SaveStudentAvailability}" >
+    <div class="course-section">
+      <h3>Course Information</h3>
+      <div class="form-group">
+        <label for="course">Which course are you looking to study for?</label>
+        <select id="course" name="course" required>
+          <option value="">Select your course</option>
+          <option value="Mathematics">Mathematics</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Biology">Biology</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Business">Business</option>
+          <option value="Psychology">Psychology</option>
+        </select>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: 20px; color: #333;">Weekly Availability</h3>
+
+    <!-- MONDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Monday</div>
+        <input type="checkbox" class="available-checkbox" name="monday_available" onchange="toggleDayInputs('monday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="monday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="monday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="monday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 2:</div>
+          <div class="time-inputs">
+            <input type="time" name="monday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="monday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="monday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="monday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TUESDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Tuesday</div>
+        <input type="checkbox" class="available-checkbox" name="tuesday_available" onchange="toggleDayInputs('tuesday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="tuesday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="tuesday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="tuesday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 2:</div>
+          <div class="time-inputs">
+            <input type="time" name="tuesday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="tuesday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="tuesday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="tuesday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEDNESDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Wednesday</div>
+        <input type="checkbox" class="available-checkbox" name="wednesday_available" onchange="toggleDayInputs('wednesday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="wednesday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="wednesday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="wednesday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 2:</div>
+          <div class="time-inputs">
+            <input type="time" name="wednesday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="wednesday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="wednesday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="wednesday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THURSDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Thursday</div>
+        <input type="checkbox" class="available-checkbox" name="thursday_available" onchange="toggleDayInputs('thursday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="thursday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="thursday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="thursday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 2:</div>
+          <div class="time-inputs">
+            <input type="time" name="thursday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="thursday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="thursday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="thursday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRIDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Friday</div>
+        <input type="checkbox" class="available-checkbox" name="friday_available" onchange="toggleDayInputs('friday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="friday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="friday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="friday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 2:</div>
+          <div class="time-inputs">
+            <input type="time" name="friday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="friday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="friday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="friday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SATURDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Saturday</div>
+        <input type="checkbox" class="available-checkbox" name="saturday_available" onchange="toggleDayInputs('saturday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="saturday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="saturday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="saturday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="saturday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="saturday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="saturday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="saturday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUNDAY -->
+    <div class="day-section">
+      <div class="day-header">
+        <div class="day-label">Sunday</div>
+        <input type="checkbox" class="available-checkbox" name="sunday_available" onchange="toggleDayInputs('sunday', this)">
+        <span class="time-hint">Check to enable time slots</span>
+      </div>
+      <div class="slots-container slots-disabled" id="sunday_slots">
+        <div class="slot-row">
+          <div class="slot-label">Slot 1:</div>
+          <div class="time-inputs">
+            <input type="time" name="sunday_start1" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="sunday_end1" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 2:</div>
+          <div class="time-inputs">
+            <input type="time" name="sunday_start2" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="sunday_end2" disabled>
+          </div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-label">Slot 3:</div>
+          <div class="time-inputs">
+            <input type="time" name="sunday_start3" disabled>
+            <span class="to-label">to</span>
+            <input type="time" name="sunday_end3" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <button type="submit" class="submit-btn">Save Availability</button>
+      <button type="button" class="cancel-btn">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function toggleDayInputs(day, checkbox) {
+      const slotsContainer = document.getElementById(`${day}_slots`);
+      const timeInputs = slotsContainer.querySelectorAll('input[type="time"]');
+
+      if (checkbox.checked) {
+          slotsContainer.classList.remove('slots-disabled');
+          timeInputs.forEach(input => {
+              input.disabled = false;
+          });
+      } else {
+          slotsContainer.classList.add('slots-disabled');
+          timeInputs.forEach(input => {
+              input.disabled = true;
+              input.value = '';
+          });
+      }
+  }
+
+  document.getElementById('availabilityForm').addEventListener('submit', function(e) {
+
+      // Get form data
+      const formData = new FormData(this);
+      const data = {};
+
+      for (let [key, value] of formData.entries()) {
+          data[key] = value;
+      }
+
+      console.log('Form data:', data);
+      alert('Availability saved! (This would normally send to your backend)');
+  });
+</script>
+</body>
+</html>
