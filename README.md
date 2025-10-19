@@ -10,4 +10,6 @@ Student Housing Network -Find compatible flatmates and house-sharing opportuniti
 
 For Lecturers -Intuitive interface for accessing student academic records and performance data -Comprehensive student information management system -Streamlined access to essential student details
 
+Currently providing a secure storage location for student images and possibly more using AWS S3
+
 Vision The ultimate goal is to create an inclusive digital ecosystem that ensures every student—regardless of their study schedule—has access to the resources, connections, and support needed for a fulfilling university experience.
