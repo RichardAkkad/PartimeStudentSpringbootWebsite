@@ -32,6 +32,9 @@ public class StudentController {
     @Autowired
     StudentRepository studentRepository;
 
+    @Autowired
+    private S3Service s3Service;
+    
     @GetMapping("/index")
     public String homePage(){
         return "index";
@@ -55,25 +58,14 @@ public class StudentController {
                               BindingResult bindingResult,
                               RedirectAttributes redirectAttributes) {
 
-        // Debug file information
-        System.out.println("-----FILE DEBUG INFO-----");
-        System.out.println("File is null: " + (file == null));
-        if (file != null) {
-            System.out.println("File is empty: " + file.isEmpty());
-            System.out.println("File name: " + file.getOriginalFilename());
-            System.out.println("File size: " + file.getSize());
-            System.out.println("Content type: " + file.getContentType());
-        }
+   
 
         try {
+               // Upload file to S3 if present
             if (file != null && !file.isEmpty()) {
-                System.out.println("Processing file upload...");
-                String filename = saveProfilePicture(file);
-                System.out.println("Saved filename: " + filename);
+                String filename = s3Service.uploadFile(file);
                 student.setProfilePicture(filename);
             }
-            else {
-                System.out.println("No file to process");
             }
 
             System.out.println("Student profilePicture field: " + student.getProfilePicture());
