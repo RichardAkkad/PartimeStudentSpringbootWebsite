@@ -27,7 +27,8 @@ public class StudentService {
     @Autowired
     CustomUserEncryptService customUserEncryptService;
 
-
+    @Autowired
+    S3Service s3Service;
 
 
     public String addStudentServices(){
@@ -61,7 +62,7 @@ public class StudentService {
             throw new StudentNameNotFoundException("username not found, try again");
         }
         else {
-            Student student = optionalStudent.get();
+               Student student = optionalStudent.get();
 
             // Get the picture filename BEFORE deleting the student
             String profilePicture = student.getProfilePicture();
@@ -69,38 +70,15 @@ public class StudentService {
             // Delete student from database
             studentRepository.deleteById(id);
 
-            // Delete the picture file if it exists
+            // Delete the picture file from S3 if it exists
             if (profilePicture != null && !profilePicture.isEmpty()) {
-                deleteProfilePictureFile(profilePicture);
+                s3Service.deleteFile(profilePicture);
+            }
             }
 
             return "StudentDeletedSuccessfully";
         }
     }
-
-    private void deleteProfilePictureFile(String filename) {
-        try {
-            String uploadDir = "C:/Users/richa/OneDrive/Desktop/student-images/";
-            File fileToDelete = new File(uploadDir + filename);
-
-            if (fileToDelete.exists()) {
-                boolean deleted = fileToDelete.delete();
-                System.out.println("Picture file deleted from service: " + deleted + " - " + filename);
-            }
-        } catch (Exception e) {
-            System.out.println("Error deleting picture from service: " + e.getMessage());
-        }
-    }
-
-
-
-
-
-
-
-
-
-
 
 
     public String findAgefromServices(int age, Model model) {
