@@ -186,7 +186,9 @@
       <div class="student-header">
         <!-- Profile Picture -->
         <div th:if="${student.profilePicture != null and !#strings.isEmpty(student.profilePicture)}">
-          <img th:src="@{/images/profiles/{filename}(filename=${student.profilePicture})}"
+        <!--  <img th:src="@{/images/profiles/{filename}(filename=${student.profilePicture})}"  -->
+          <img th:src="@{/api/s3/photo/{filename}(filename=${student.profilePicture})}"
+
                alt="Profile Picture"
                class="student-image"
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
