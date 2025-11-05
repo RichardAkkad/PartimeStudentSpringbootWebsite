@@ -24,7 +24,6 @@ public class StudentRestController {
         }
         catch (Exception e) {
             return ResponseEntity.status(500).build();
-            //If save fails, it's a server/database problem → 500 , not a "not found" problem
         }
 
     }
@@ -59,8 +58,7 @@ public class StudentRestController {
             Optional<Student> optionalStudent = studentRepository.findById(integerId);
             if (optionalStudent.isPresent()) {
                 return ResponseEntity.status(201).body(" the "+optionalStudent+" was saved correctly");
-            }//201 = Created (correct for POST/creating new data)
-            //200 = Success (for GET, PUT, PATCH, DELETE)
+            }
             else{
                 return ResponseEntity.status(404).body("the id "+id+ " was not found");
             }
