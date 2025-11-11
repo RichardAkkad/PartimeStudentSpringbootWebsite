@@ -57,7 +57,7 @@ public class StudentRestController {
             Integer integerId=Integer.parseInt(id);
             Optional<Student> optionalStudent = studentRepository.findById(integerId);
             if (optionalStudent.isPresent()) {
-                return ResponseEntity.status(201).body(" the "+optionalStudent+" was saved correctly");
+                return ResponseEntity.status(200).body("here is the  "+optionalStudent.get()+" details");
             }
             else{
                 return ResponseEntity.status(404).body("the id "+id+ " was not found");
