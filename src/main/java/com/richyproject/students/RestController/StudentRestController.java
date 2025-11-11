@@ -52,12 +52,13 @@ public class StudentRestController {
 
 
     @GetMapping("/searchStudentById")
-    public ResponseEntity<String>  searchStudentViaId(@RequestParam String id) {
+    public ResponseEntity<?>  searchStudentViaId(@RequestParam String id) {
         try {
             Integer integerId=Integer.parseInt(id);
             Optional<Student> optionalStudent = studentRepository.findById(integerId);
             if (optionalStudent.isPresent()) {
-                return ResponseEntity.status(200).body("here is the  "+optionalStudent.get()+" details");
+               return ResponseEntity.ok(optionalStudent.get());
+
             }
             else{
                 return ResponseEntity.status(404).body("the id "+id+ " was not found");
