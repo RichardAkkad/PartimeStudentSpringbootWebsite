@@ -57,7 +57,7 @@ public class StudentRestController {
             Integer integerId=Integer.parseInt(id);
             Optional<Student> optionalStudent = studentRepository.findById(integerId);
             if (optionalStudent.isPresent()) {
-               return ResponseEntity.ok(optionalStudent.get());
+                return ResponseEntity.ok(Map.of("message", "Here are the details", "data", optionalStudent.get()));
 
             }
             else{
