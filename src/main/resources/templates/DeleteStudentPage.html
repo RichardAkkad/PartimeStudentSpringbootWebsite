@@ -83,6 +83,7 @@
     <div class="content">
         <h2>Delete Student</h2>
         <form th:action="@{/DeleteActualStudent}" method="post" style="width: 100%;">
+            <input type="hidden" name="_method" value="delete"/> 
             <div class="form-group">
                 <label for="id">Student ID:</label>
                 <input type="number" id="id" name="id" min="1" required/>
