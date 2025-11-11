@@ -45,6 +45,25 @@ public class StudentController {
 
 
 
+    @Autowired
+    StudentService studentService;
+
+    @Autowired
+    StudentRepository studentRepository;
+//-------------------------------
+    @Autowired
+    private S3Service s3Service;
+//---------------------------------
+    @GetMapping("/index")
+    public String homePage(){
+        return "index";
+    }
+
+
+
+
+
+
     @GetMapping("/AddStudentPage")
     public String getaddStudentPage(Model model)
     {
@@ -58,17 +77,15 @@ public class StudentController {
                               BindingResult bindingResult,
                               RedirectAttributes redirectAttributes) {
 
-   
-
         try {
-               // Upload file to S3 if present
+
+//-----------------------------------------------------------------------------
+            // Upload file to S3 if present
             if (file != null && !file.isEmpty()) {
                 String filename = s3Service.uploadFile(file);
                 student.setProfilePicture(filename);
             }
-            }
-
-            System.out.println("Student profilePicture field: " + student.getProfilePicture());
+//-----------------------------------------------------------------------------
             return studentService.saveStudentServices(student);
 
         }
@@ -79,50 +96,6 @@ public class StudentController {
             return "redirect:/AddStudentPage";
         }
     }
-
-
-
-
-
-
-
-    private String saveProfilePicture(MultipartFile file) throws IOException {
-        System.out.println("=== SAVE FILE DEBUG ===");
-
-        // Save to Desktop/student-images folder
-        String uploadDir = "C:/Users/richa/OneDrive/Desktop/student-images/";
-
-
-        System.out.println("Upload directory: " + uploadDir);
-
-        // Create folder if it doesn't exist
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            boolean created = dir.mkdirs();
-            System.out.println("Directory created: " + created);
-        }
-        System.out.println("Directory exists: " + dir.exists());
-
-        // Create unique filename
-        String originalName = file.getOriginalFilename();
-        String extension = originalName.substring(originalName.lastIndexOf("."));
-        String uniqueName = System.currentTimeMillis() + extension;
-        System.out.println("Unique filename: " + uniqueName);
-
-        // Save the file
-        File destFile = new File(uploadDir + uniqueName);
-        System.out.println("Destination path: " + destFile.getAbsolutePath());
-
-        file.transferTo(destFile);
-        System.out.println("File saved successfully: " + destFile.exists());
-
-        System.out.println("File size on disk: " + destFile.length()); // ADD THIS LINE and remove after
-        System.out.println("EXACT FULL PATH: " + destFile.getCanonicalPath()); // ADD THIS and remove after
-
-
-        return uniqueName; // Return just the filename
-    }
-
 
 
 
@@ -198,7 +171,7 @@ public class StudentController {
         return studentService.searchForStudentServices();
     }
 
-    @PostMapping("/SearchStudent")
+    @GetMapping("/SearchStudentById")
     public String studentIdResult(@RequestParam int id, Model model) throws StudentNameNotFoundException{
         try {
             return studentService.studentSearchIdResultServices(id, model);
@@ -211,7 +184,7 @@ public class StudentController {
     //******** WHY HAVE I ONLY ONE PART TO THIS?
     @PostMapping("/SearchStudentByAgeRange")
     public String getstudentAgeRangeResult(@RequestParam String Course, @RequestParam int MinAge, @RequestParam int MaxAge,@RequestParam int MinGrade,@RequestParam int MaxGrade, Model model) {
-        return studentService.searchStudentByAgeRangeServices(Course, MinAge, MaxAge,MinGrade,MaxGrade, model);
+        return studentService.searchStudentByAgeRangeServices(Course.toLowerCase(), MinAge, MaxAge,MinGrade,MaxGrade, model);
     }
 //--------------------------------------------------------------
 
@@ -226,7 +199,7 @@ public class StudentController {
 
         return studentService.studentServicesDeletePage();
     }
-    @PostMapping("/DeleteActualStudent")
+    @DeleteMapping("/DeleteActualStudent")
     public String deleteActualStudent(@RequestParam int id)throws StudentNameNotFoundException {
 
         try {
@@ -272,22 +245,24 @@ public class StudentController {
             return studentService.updateStudentPageServices(model);
             }
 
-        @PostMapping("/UpdateStudent")
-        public String updateStudentResults(@RequestParam Integer id,@RequestParam  String firstName, @RequestParam  String surname,
+        @PatchMapping("/UpdateStudent")
+        public String updateStudentResults(@RequestParam Integer id,@RequestParam String firstName, @RequestParam String surname,
                                            @RequestParam(required=false) Integer age, @RequestParam String course ,
-                                           @RequestParam(required=false) Integer grade,@RequestParam String username, Model model) {
+                                           @RequestParam(required=false) Integer grade,@RequestParam String username,@RequestParam String local_Date, Model model) {
             //even though certain fields are not required something still needs to be returned for these parameters here from what i understand
             //if we use a primitive int instead of a Integer it might return  0 as it needs to return something but 0 is a value so wouldnt make sense, so using null is better for Integer i think
 
-
-            firstName = (!firstName.trim().isEmpty()) ? firstName.toLowerCase() : null;
-            surname = (!surname.trim().isEmpty()) ? surname.toLowerCase() : null;
-            course = (!course.trim().isEmpty()) ? course.toLowerCase() : null;
-            username = (!username.trim().isEmpty()) ? username.toLowerCase() : null;
+            System.out.println("patch is working up to here");
+            System.out.println("ID is "+id);
+            firstName = !firstName.trim().isEmpty()? firstName.toLowerCase() : null;
+            surname = !surname.trim().isEmpty() ? surname.toLowerCase() : null;
+            course = !course.trim().isEmpty() ? course.toLowerCase() : null;
+            username = !username.trim().isEmpty() ? username.toLowerCase() : null;
+            local_Date=!local_Date.trim().isEmpty()?local_Date.toLowerCase():null;
 
             try {
 
-                return studentService.updateStudentServices(id, firstName, surname, age, course, grade, username, model);
+                return studentService.updateStudentServices(id, firstName, surname, age, course, grade, username, local_Date,model);
 
             } catch (Exception e) {
                 String message = e.getMessage();
