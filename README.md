@@ -5,11 +5,11 @@ The following features represent the initial development phase, with plans to in
 Students Academic Progress Tracking -View average grades with personalized insights showing proximity to the next grade tier -Motivational feedback system to boost academic confidence
 
 Study Group Formation -Connect with course-mates to form collaborative study groups -Facilitate meetups for discussing course material and building peer relationships -Specially designed to bridge the social gap for part-time students
-
+ a
 Student Housing Network -Find compatible flatmates and house-sharing opportunities within the student community -Advanced filtering system to match housing preferences and lifestyle requirements -Connect students seeking shared accommodation
 
 For Lecturers -Intuitive interface for accessing student academic records and performance data -Comprehensive student information management system -Streamlined access to essential student details
 
-Currently providing a secure storage location for student images and possibly more using AWS S3.
+Currently providing a secure storage location using AWS S3 and a EC2 instance.
 
 Vision The ultimate goal is to create an inclusive digital ecosystem that ensures every student—regardless of their study schedule—has access to the resources, connections, and support needed for a fulfilling university experience.
