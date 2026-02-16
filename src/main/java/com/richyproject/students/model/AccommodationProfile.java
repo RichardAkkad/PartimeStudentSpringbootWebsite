@@ -11,7 +11,6 @@ import java.util.List;
 
 public class AccommodationProfile {
 
-
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private int id;
@@ -19,6 +18,7 @@ public class AccommodationProfile {
     @OneToOne
     @JoinColumn(name = "student_id")
     private Student student;
+
 
     @Column(name="smoker")
     private String smoker;
@@ -31,6 +31,9 @@ public class AccommodationProfile {
     private int age;
     private String email;
     private String course;
+
+
+
 
 
 

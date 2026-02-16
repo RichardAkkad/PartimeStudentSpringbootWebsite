@@ -46,9 +46,10 @@ public class AccommodationProfileService {
         //using the "profile" here which points to the same object as "acccommProfile" that had just binded to the fields in the method that called this method
         //already logged in at this point so can retrieve the username from the database which is what currentUser is used for and now we have the object from the database
         Optional<Student> student = studentRepository.findByUsername(currentUser.getUsername());
-        profile.setStudent(student.get());//when put the student object in the argument of setStudent ("student" is a field from the accomm....) it then automatically know to save the "key" being the id of the student object
+        profile.setStudent(student.get());//when put the student object in the argument of setStudent ("student" is a field from the accomm....) it then automatically know to save the "key" being the
+        // id of the student object, ie JPA automatically extracts the student.getId() and stores it in the student_id column, you don't have to manually get the ID
         accommodationProfileRepository.save(profile);//then we save the accomodationProfile variable (that is assigned to the accomodationProfile object) as a whole
-
+        //when getting "student_id" from the database it returns as a Student object and when saving Student object it saves as "student_id" as a id number in the database i think?
         return "PageSavedSuccessfully";
 
 
@@ -61,10 +62,8 @@ public class AccommodationProfileService {
 
     public String searchRoommatePageServices(String smoker, int minAge, int maxAge, double minBudget, double maxBudget, String pets,
                                              String dietaryPattern, String guests, List<String> genderPreference, List<String> courses, Model model, UserDetails userDetails) {
-        //***NEED TO FIGURE OUT HOW TO GET ALL THESE PARAMETERS TO LOWERCASE, THE ACCOMMODATIONPROFILE FIELDS HAS ALREADY BEEN SET TO LOWERCASE ABOVE , AS WELL AS THE SAVEDUPDATEDROOMMATE FIELDS BELOW
         //we dont have any empty strings "" or null assigned to any of the parameter variables because no fields on the form are left empty
         List<AccommodationProfile> accomodationProfileList = accommodationProfileRepository.findAll();
-
         //********
         System.out.println(accomodationProfileList.size());
 
@@ -88,9 +87,9 @@ public class AccommodationProfileService {
 
         };
 
-        List<String> filteredList = accomodationProfileList.stream().filter(obj -> obj.getAge() >= minAge
-                        && obj.getAge() <= maxAge && obj.getMinBudget() <= minBudget && obj.getMaxBudget() <= maxBudget && obj.getSmoker().toLowerCase().equals(smokerLower) &&
-                        obj.getGuests().toLowerCase().equals(guestsLower) && obj.getHasPets().toLowerCase().equals(petsLower) && obj.getDietaryPattern().toLowerCase().equals(dietaryPatternLower))
+        List<String> filteredList = accomodationProfileList.stream().filter(obj -> (obj.getAge() >= minAge
+                        && obj.getAge() <= maxAge) && (obj.getMinBudget() <= minBudget && obj.getMaxBudget() >= maxBudget) && (obj.getSmoker().toLowerCase().equals(smokerLower)) &&
+                (obj.getGuests().toLowerCase().equals(guestsLower)) && (obj.getHasPets().toLowerCase().equals(petsLower)) && (obj.getDietaryPattern().toLowerCase().equals(dietaryPatternLower)))
                 .filter(studentGender).filter(studentCourse).map(obj -> obj.getEmail()).toList();
 
 
@@ -128,10 +127,10 @@ public class AccommodationProfileService {
         }
         return "PageSavedSuccessfully";
     }
-           public String deleteAccommodationProfileServices(Integer studentId)throws StudentNameNotFoundException{
-                Optional<Student> optionalStudent=studentRepository.findById(studentId);
-               if(optionalStudent.isPresent()){
-                   accommodationProfileRepository.deleteById(studentId);
+           public String deleteAccommodationProfileServices(Integer accommodationProfileId)throws StudentNameNotFoundException{
+                Optional<AccommodationProfile> optionalAccommodationProfile=accommodationProfileRepository.findById(accommodationProfileId);
+               if(optionalAccommodationProfile.isPresent()){
+                   accommodationProfileRepository.deleteById(accommodationProfileId);
                    return "StudentDeletedSuccessfully";
 
                }
@@ -154,24 +153,6 @@ public class AccommodationProfileService {
 
 }
 /*
-
-
-      This project aims to create a comprehensive web platform that enhances the university experience for all students, with particular focus on part-time and evening students (like I was myself at one point) who often miss out on traditional campus resources. My goal was to create a website that bridges the social disconnect in traditional university platforms, ensuring that whether you're a mature learner, or juggling work commitments, everyone can access a vibrant university community, as well as provide tools for lecturers to better support their students.
-
-      The following features represent the initial development phase, with plans to incorporate additional functionality once complete as well as getting the website hosted.
-
-      Students Academic Progress Tracking -View average grades with personalized insights showing proximity to the next grade tier -Motivational feedback system to boost academic confidence
-
-      Study Group Formation -Connect with course-mates to form collaborative study groups -Facilitate meetups for discussing course material and building peer relationships -Specially designed to bridge the social gap for part-time students
-
-      Student Housing Network -Find compatible flatmates and house-sharing opportunities within the student community -Advanced filtering system to match housing preferences and lifestyle requirements -Connect students seeking shared accommodation
-
-      For Lecturers -Intuitive interface for accessing student academic records and performance data -Comprehensive student information management system -Streamlined access to essential student details
-
-      Vision The ultimate goal is to create an inclusive digital ecosystem that ensures every student—regardless of their study schedule—has access to the resources, connections, and support needed for a fulfilling university experience.
-
-
-
 
 
 

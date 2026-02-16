@@ -185,7 +185,7 @@
 <div class="container">
     <div class="header">
         <h1>🎯 Search Results</h1>
-        <p>Here are the roommates that match your criteria</p>
+        <p>you can contact the following students via their email addresses</p>
     </div>
 
     <div class="results-container">
@@ -193,10 +193,6 @@
         <div class="results-count" th:if="${list != null and !list.isEmpty()}">
             <span th:text="'Found ' + ${list.size()} + ' matching roommate(s)'"></span>
         </div>
-
-        <h2 class="results-header">
-            <span>📧 Matching Roommate Emails</span>
-        </h2>
 
         <!-- Email results list -->
         <ul class="email-list" th:if="${list != null and !list.isEmpty()}">
@@ -220,7 +216,7 @@
                 🔍 Search Again
             </a>
             <a href="/index" class="btn btn-secondary">
-                🏠 Back to Homepage
+                Back to Homepage
             </a>
         </div>
     </div>

@@ -1,0 +1,119 @@
+package com.richyproject.students.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
+
+import java.io.IOException;
+
+@Service
+public class S3Service {
+
+    @Autowired
+    private S3Client s3Client;
+
+    @Value("${aws.bucket.name}")
+    private String bucketName;
+
+    /**
+     * Upload a file to S3 bucket
+     */
+    public String uploadFile(MultipartFile file) throws IOException {
+        String fileName = generateFileName(file);
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key("student-images/" + fileName)
+                .contentType(file.getContentType())
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+
+        return fileName;
+    }
+
+    /**
+     * Download/retrieve file from S3 bucket
+     */
+    public byte[] downloadFile(String fileName) {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key("student-images/" + fileName)
+                .build();
+
+        ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObjectAsBytes(getObjectRequest);
+        return objectBytes.asByteArray();
+    }
+
+    /**
+     * Delete a file from S3 bucket
+     */
+    public void deleteFile(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            return;
+        }
+
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key("student-images/" + fileName)
+                    .build();
+
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            System.out.println("Error deleting file from S3: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Get the public URL for a file
+     */
+    public String getFileUrl(String fileName) {
+        return String.format("https://%s.s3.%s.amazonaws.com/%s",
+                bucketName,
+                s3Client.serviceClientConfiguration().region().id(),
+                fileName);
+    }
+
+    /**
+     * Generate a unique filename
+     */
+    private String generateFileName(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+
+        return System.currentTimeMillis() + extension;
+    }
+
+    /**
+     * Check if file exists in S3
+     */
+    public boolean fileExists(String fileName) {
+        try {
+            HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fileName)
+                    .build();
+
+            s3Client.headObject(headObjectRequest);
+            return true;
+        } catch (NoSuchKeyException e) {
+            return false;
+        }
+    }
+
+
+
+
+
+
+}

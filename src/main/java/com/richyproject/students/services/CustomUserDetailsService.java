@@ -52,12 +52,21 @@ public class CustomUserDetailsService implements UserDetailsService {
                System.out.println("Student password starts with $2a$: " + studentOpt.getPassword().startsWith("$2a$"));
 
 
-               return User.builder().username(student.get().getUsername()).password(student.get().getPassword()).roles(Role.STUDENT.toString()).build();
+               return User.builder().
+                       username(student.get().
+                               getUsername()).password(student.get()
+                               .getPassword())
+                                .roles(Role.STUDENT.toString())
+                                .build();
 
 
 //note that any information returned from the UserDetails is information like username, password and role here , this UserDetails object cant have fields like age,id... etc are not accepted as its not related to security
            } else if (employee.isPresent()) {
-               return User.builder().username(employee.get().getUsername()).password(employee.get().getPassword()).roles(Role.TEACHER.toString()).build();//could just do "Role.TEACHER.toString()/name()" or directly place the String "TEACHER" as the parameter takes a string. we could just pass in a string directly so pointless having a Role enum
+               return User.builder()
+                       .username(employee.get().getUsername())
+                       .password(employee.get().getPassword())
+                       .roles(Role.TEACHER.toString())
+                       .build();//could just do "Role.TEACHER.toString()/name()" or directly place the String "TEACHER" as the parameter takes a string. we could just pass in a string directly so pointless having a Role enum
 
 
            } else {

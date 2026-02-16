@@ -99,9 +99,13 @@
   <form class="login-form" action="/login" method="post">
     <h2>Please sign in</h2>
 
-    <!-- Logout message (shows when ?logout is in URL) -->
-    <div id="logoutMessage" class="logout-message" style="display: none;">
+    <!-- Logout message -->
+    <div th:if="${param.logout}" class="logout-message">
       You have been logged out.
+    </div>
+
+    <!-- Error message - shows dynamic message from controller -->
+    <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}">
     </div>
 
     <div class="form-group">
@@ -114,23 +118,8 @@
       <input type="password" id="password" name="password" required>
     </div>
 
-    <!--
-    <div th:if="${errorMessage}" style="color: red;">
-      <span th:text="${errorMessage}"></span>
-    </div>
-    -->
-
     <button type="submit">Sign in</button>
   </form>
 </div>
-
-<script>
-  // Check URL parameters and show logout message
-  const urlParams = new URLSearchParams(window.location.search);
-
-  if (urlParams.has('logout')) {
-      document.getElementById('logoutMessage').style.display = 'block';
-  }
-</script>
 </body>
 </html>

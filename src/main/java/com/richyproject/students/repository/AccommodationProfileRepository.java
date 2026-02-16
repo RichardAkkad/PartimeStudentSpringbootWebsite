@@ -1,6 +1,7 @@
 package com.richyproject.students.repository;
 
 import com.richyproject.students.model.AccommodationProfile;
+import com.richyproject.students.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,8 @@ public interface AccommodationProfileRepository extends JpaRepository<Accommodat
 
 
 
-
+                // come back to check if below works
+        AccommodationProfile findByStudent(Student student);
 
 
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 
@@ -26,8 +27,10 @@ public class StudentService {
 
     @Autowired
     CustomUserEncryptService customUserEncryptService;
-
-
+//---------------------------
+    @Autowired
+    S3Service s3Service;
+//---------------------------
 
 
     public String addStudentServices(){
@@ -61,6 +64,9 @@ public class StudentService {
             throw new StudentNameNotFoundException("username not found, try again");
         }
         else {
+
+
+//-----------------------------------------------------------------------------
             Student student = optionalStudent.get();
 
             // Get the picture filename BEFORE deleting the student
@@ -69,29 +75,14 @@ public class StudentService {
             // Delete student from database
             studentRepository.deleteById(id);
 
-            // Delete the picture file if it exists
+            // Delete the picture file from S3 if it exists
             if (profilePicture != null && !profilePicture.isEmpty()) {
-                deleteProfilePictureFile(profilePicture);
+                s3Service.deleteFile(profilePicture);
             }
-
+//------------------------------------------------------------------------------
             return "StudentDeletedSuccessfully";
         }
     }
-
-    private void deleteProfilePictureFile(String filename) {
-        try {
-            String uploadDir = "C:/Users/richa/OneDrive/Desktop/student-images/";
-            File fileToDelete = new File(uploadDir + filename);
-
-            if (fileToDelete.exists()) {
-                boolean deleted = fileToDelete.delete();
-                System.out.println("Picture file deleted from service: " + deleted + " - " + filename);
-            }
-        } catch (Exception e) {
-            System.out.println("Error deleting picture from service: " + e.getMessage());
-        }
-    }
-
 
 
 
@@ -233,7 +224,7 @@ public String searchStudentByAgeRangeServices(String Course,int MinAge, int MaxA
         return "UpdateStudentPage";
 
       }
-    public String updateStudentServices(Integer id,String firstName,String surname, Integer age, String course, Integer grade,String username,Model model) throws StudentIdNotFoundException{
+    public String updateStudentServices(Integer id,String firstName,String surname, Integer age, String course, Integer grade,String username,String local_Date,Model model) throws StudentIdNotFoundException{
         Optional<Student> optionalStudent=studentRepository.findById(id);
         if(optionalStudent.isPresent()){
             optionalStudent.get().setId(id!=null?id:optionalStudent.get().getId());
@@ -243,9 +234,12 @@ public String searchStudentByAgeRangeServices(String Course,int MinAge, int MaxA
             optionalStudent.get().setCourse(course!=null?course:optionalStudent.get().getCourse());
             optionalStudent.get().setGrade(grade!=null?grade:optionalStudent.get().getGrade());
             optionalStudent.get().setUsername(username!=null?username:optionalStudent.get().getUsername());
+            optionalStudent.get().setLocalDate(local_Date!=null?LocalDate.parse(local_Date):optionalStudent.get().getLocalDate());
             studentRepository.save(optionalStudent.get());
-
+            System.out.println("and working here as well");
+            //as we are using the same "id" then we are not creating a new only updating regardless if we use post or patch but by convention patch is better for updating
         }
+
 
         else {
             throw new StudentIdNotFoundException("there was no student found with that id, please try again");

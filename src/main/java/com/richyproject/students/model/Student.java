@@ -4,6 +4,7 @@ import com.richyproject.students.Enum.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.EnumMap;
 
 @Data
@@ -32,6 +33,8 @@ public class Student {
     private Role role = Role.STUDENT;
 
     private String profilePicture;
+
+    private LocalDate localDate;
 
 
 
