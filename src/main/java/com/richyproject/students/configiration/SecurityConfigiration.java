@@ -50,10 +50,10 @@ public class SecurityConfigiration {
             @Override
             public void customize(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationManagerRequestMatcherRegistry) {
                 authorizationManagerRequestMatcherRegistry
-                        .requestMatchers("/DeletePage",  "/DeleteEmployee", "/SearchStudentPage")//"/AddNewEmployeePage",
+                        .requestMatchers(  "/DeleteEmployee","/AddNewEmployeePage","/DeleteStudentPage","/DeleteStudentAccomodationProfile","/UpdateStudent","/AddStudentPage","/SearchStudent","/DeleteStudentsAvailability")//come back to this other delete student endpoint as well"/DeleteStudentsAvailability")
                         .hasAnyRole("TEACHER")
-                        .requestMatchers("/AgeRange", "/AgeRangePercentage", "/AverageGrades", "/AddStudentPage", "/UpdateStudentPage", "/AccommodationProfile", "/FindRoommate", "/UpdateAccommodationProfile")
-                        .hasAnyRole("TEACHER", "STUDENT")
+                        .requestMatchers(  "/UpdateAccommodationProfile","/AccommodationProfile","/AgeRangePercentage","/AgeRange","/AverageGrades","/FindRoommate","StudentAvailabilityPage","/SearchStudent")
+                        .hasAnyRole("TEACHER","STUDENT")
                         .anyRequest()//.authenticated();
 
                         // with ".anyRequest().permitAll()" everything else is open to everyone and also the login page doesnt appear because no reason to redirect to a login page because everything is already accessible.But with
@@ -79,9 +79,8 @@ public class SecurityConfigiration {
                         httpSecurityFormLoginConfigurer
                                 .loginPage("/LoginPage") // ← when user tries to go to a restricted endpoint then redirect to this page.
                                 //.failureUrl("/LoginPage?error=true") // ← If login fails, redirect here with error
-                                .failureHandler(new CustomAuthenticationFailureHandler())
-                                //.failureHandler()
-                                .loginProcessingUrl("/login") // ← Form submits and then we come to this line here (Spring handles automatically this endpoint, can write anything here not just "/login"
+                                .failureHandler(new CustomAuthenticationFailureHandler())//the bean here is used to call the onAuthenticationFailureHandler method after the locked exception if thrown back up the call stack
+                                .loginProcessingUrl("/login") // ← Form submits and then we come to this line here (Spring handles automatically this endpoint lines 66-72 is a idea of the code for this), can write anything here not just "/login"
                                 .permitAll();// ← Allow access to all login-related URLs
 
                     }//When you don't specify loginProcessingUrl(), Spring Security defaults to using the same URL as your login page. so When you don't specify "loginProcessingUrl()"
@@ -90,8 +89,14 @@ public class SecurityConfigiration {
                 };
 
 
-                return http.authorizeHttpRequests(authorization).formLogin(formLoginCustomizer).csrf(obj -> obj.disable()).build();
-
+        return http.authorizeHttpRequests(authorization)
+                .formLogin(formLoginCustomizer)
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/ErrorPage?error=access");
+                        }))
+                .csrf(obj -> obj.disable())
+                .build();
 
             }
 
@@ -101,7 +106,11 @@ public class SecurityConfigiration {
 
                 CustomDaoAuthenticationProvider provider = new CustomDaoAuthenticationProvider();
                 provider.setUserDetailsService(userDetailsService);
-                provider.setPasswordEncoder(passwordEncoder);
+                provider.setPasswordEncoder(passwordEncoder);// so this here just creates a bEncrypt object so that I can call the matches method in the customDao...class and in the additionalAuthenticationChecks method in the Dao.... class
+                //Its so that we can use the matches method earlier in my custom authenticate method instead of waiting for it to be used in the matches method in the addidtionauthenticationchecks method only in the Dao..... class, matches method will be used twice here if no locked exception is thrown
+                //also note that the locked exception get thrown back up the call stack to authenticate method in the providermanager class and then to the attemptauthentication method in the usernamepasswordauthenticationfilter class
+                // and then to a doFilter class which apparently catches it where a failureHandler method  somewhere does something with it.
+
                 return provider;// if a bean if just a object then i am assuming that its just then object "CustomDao......." with the reference type as Authentication Provider without a variable name, i think "provider is used as the variable name (from the authenticate method in the provider manager class)
 
               

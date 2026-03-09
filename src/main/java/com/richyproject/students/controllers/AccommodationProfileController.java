@@ -71,7 +71,7 @@ public class AccommodationProfileController {
 
     }
 
-    @GetMapping("/DeleteProfile")
+    @GetMapping("/DeleteStudentAccomodationProfile")
     public String deleteAccommodationProfilePage(){
 
     return "DeleteAccommodationProfilePage";

@@ -41,10 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                System.out.println("Both student and employee are empty for username: " + name);
 
                throw new UsernameNotFoundException("username not found, try again");
-
-
            }
-
 
            if (student.isPresent()) {
                Student studentOpt = student.get();

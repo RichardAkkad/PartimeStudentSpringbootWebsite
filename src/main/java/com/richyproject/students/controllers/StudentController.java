@@ -40,12 +40,16 @@ public class StudentController {
 
 
     @GetMapping("/AddStudentPage")
-    public String getaddStudentPage(Model model)
-    {
+    public String getaddStudentPage(Model model) {
+
         model.addAttribute("request", new Student());
 
         return studentService.addStudentServices();
+
+
     }
+
+
     @PostMapping("/SaveStudent")
     public String saveStudent(@ModelAttribute("request") Student student,
                               @RequestParam(value = "profilePictureFile", required = false) MultipartFile file,
@@ -136,7 +140,13 @@ public class StudentController {
 
 
 
-
+    @GetMapping("/ErrorPage")
+    public String errorPage(@RequestParam(required = false)String error, Model model){
+        if("access".equals(error)) {
+            model.addAttribute("errorMessage", "you dont have permission to access this page");
+        }
+        return "ErrorPage";
+    }
 
 
 
@@ -169,14 +179,14 @@ public class StudentController {
 
 
 
-    @GetMapping("/DeletePage")
+    @GetMapping("/DeleteStudentPage")
     public String getDeleteStudentPage() {
+        System.out.println("deleteStudent endpoint is working");
 
         return studentService.studentServicesDeletePage();
     }
-    @DeleteMapping("/DeleteActualStudent")
+    @PostMapping("/DeleteActualStudent")
     public String deleteActualStudent(@RequestParam int id)throws StudentNameNotFoundException {
-
         try {
             return studentService.deleteActualStudent(id);
         }

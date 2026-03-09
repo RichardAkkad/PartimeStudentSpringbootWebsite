@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-
+//the locked exceptions are thrown back up the call stack to this custom  method
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
                 if (exception instanceof LockedException && exception.getMessage().contains("expired")) {

@@ -7,12 +7,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "Employee")
+@Table(name = "employee")
 public class Employee {
 
-    //public User(){
 
-    //}
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
