@@ -77,14 +77,13 @@ public class SecurityConfigiration {
                     @Override
                     public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
                         httpSecurityFormLoginConfigurer
-                                .loginPage("/LoginPage") // ← when user tries to go to a restricted endpoint then redirect to this page.
-                                //.failureUrl("/LoginPage?error=true") // ← If login fails, redirect here with error
-                                .failureHandler(new CustomAuthenticationFailureHandler())//the bean here is used to call the onAuthenticationFailureHandler method after the locked exception if thrown back up the call stack
-                                .loginProcessingUrl("/login") // ← Form submits and then we come to this line here (Spring handles automatically this endpoint lines 66-72 is a idea of the code for this), can write anything here not just "/login"
-                                .permitAll();// ← Allow access to all login-related URLs
+                                .loginPage("/LoginPage") 
+                                //.failureUrl("/LoginPage?error=true") 
+                                .failureHandler(new CustomAuthenticationFailureHandler())
+                                .loginProcessingUrl("/login") 
+                                .permitAll();
 
-                    }//When you don't specify loginProcessingUrl(), Spring Security defaults to using the same URL as your login page. so When you don't specify "loginProcessingUrl()"
-                    // then GET /login → Shows the login form and POST /login → Processes the login (Spring Security handles automatically)
+                    }
 
                 };
 
@@ -106,19 +105,16 @@ public class SecurityConfigiration {
 
                 CustomDaoAuthenticationProvider provider = new CustomDaoAuthenticationProvider();
                 provider.setUserDetailsService(userDetailsService);
-                provider.setPasswordEncoder(passwordEncoder);// so this here just creates a bEncrypt object so that I can call the matches method in the customDao...class and in the additionalAuthenticationChecks method in the Dao.... class
-                //Its so that we can use the matches method earlier in my custom authenticate method instead of waiting for it to be used in the matches method in the addidtionauthenticationchecks method only in the Dao..... class, matches method will be used twice here if no locked exception is thrown
-                //also note that the locked exception get thrown back up the call stack to authenticate method in the providermanager class and then to the attemptauthentication method in the usernamepasswordauthenticationfilter class
-                // and then to a doFilter class which apparently catches it where a failureHandler method  somewhere does something with it.
+                provider.setPasswordEncoder(passwordEncoder);
 
-                return provider;// if a bean if just a object then i am assuming that its just then object "CustomDao......." with the reference type as Authentication Provider without a variable name, i think "provider is used as the variable name (from the authenticate method in the provider manager class)
-
+                return provider;
               
 
             }
 
 
         }
+
 
 
 
