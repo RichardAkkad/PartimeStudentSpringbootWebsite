@@ -9,4 +9,4 @@ The application includes full CRUD functionality — students can add (including
 
 🔗 [View Live Project](http://StudentApp-env.eba-g3fdff2p.eu-north-1.elasticbeanstalk.com)
 
-Login credentials — for Student access Username: tony | Password: tony  for Employee access Username: lucy | Password: lucy 
+Login credentials — for Student access Username: tony | Password: tony and for Employee access Username: lucy | Password: lucy 
