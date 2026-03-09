@@ -7,6 +7,6 @@ The core features allows students to search free availability slots, search for 
 
 The application includes full CRUD functionality — students can add (including uploading photos), update, and delete their profiles — strong Spring Security protocols including custom authentication and role-based access control to restrict sensitive operations. Student profile images and data are stored using AWS, with the project deployed on an AWS EC2 instance.
 
-🔗 [View Live Project](YOUR_URL_HERE)
+🔗 [View Live Project](http://StudentApp-env.eba-g3fdff2p.eu-north-1.elasticbeanstalk.com)
 
 Login credentials — Username: tony | Password: tony
