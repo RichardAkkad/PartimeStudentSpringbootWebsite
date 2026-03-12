@@ -110,16 +110,6 @@ public class StudentController {
 
     }
 
-
-
-
-
-
-
-
-
-
-
     @GetMapping("AverageGrades")
     public String getAverageGrades(){
         return "AverageGrades";
@@ -167,7 +157,7 @@ public class StudentController {
         }
     }
     //******** WHY HAVE I ONLY ONE PART TO THIS?
-    @PostMapping("/SearchStudentByAgeRange")
+    @GetMapping("/SearchStudentByAgeRange")
     public String getstudentAgeRangeResult(@RequestParam String Course, @RequestParam int MinAge, @RequestParam int MaxAge,@RequestParam int MinGrade,@RequestParam int MaxGrade, Model model) {
         return studentService.searchStudentByAgeRangeServices(Course.toLowerCase(), MinAge, MaxAge,MinGrade,MaxGrade, model);
     }
