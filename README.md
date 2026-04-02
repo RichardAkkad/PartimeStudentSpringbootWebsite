@@ -1,4 +1,4 @@
-No longer deployed on AWS as its too costly. Only code I am afraid for now:)
+No longer deployed on AWS as its too costly. Only code I am afraid for now :)
 # Website for part time students
 Html | Css | Spring Boot | AWS EC2 S3 | PostGre
 
