@@ -1,4 +1,4 @@
-No longer deployed on AWS as its too costly. Only code I am afraid for now :)
+
 # Website for part time students
 Html | Css | Spring Boot | AWS EC2 S3 | PostGre
 
@@ -8,6 +8,6 @@ The core features allows students to search free availability slots, search for 
 
 The application includes full CRUD functionality — students can add (including uploading photos), update, and delete their profiles — strong Spring Security protocols including custom authentication and role-based access control to restrict sensitive operations. Student profile images and data are stored using AWS, with the project deployed on an AWS EC2 instance.
 
-🔗 [View Live Project](http://StudentApp-env.eba-g3fdff2p.eu-north-1.elasticbeanstalk.com)
+Live Demo: http://ec2-13-40-31-169.eu-west-2.compute.amazonaws.com:5000
 
 Login credentials — for Student access Username: tony | Password: tony and for Employee access Username: lucy | Password: lucy 
