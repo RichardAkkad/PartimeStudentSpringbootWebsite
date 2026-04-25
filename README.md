@@ -10,4 +10,4 @@ The application includes full CRUD functionality — students can add (including
 
 Live Demo: http://ec2-13-40-31-169.eu-west-2.compute.amazonaws.com:5000
 
-Login credentials — for Student access Username: samuel | Password: samuel and for Employee access Username: lucy | Password: lucy 
+Login credentials — for Student access Username: tony and Password: tony and for Employee access Username: samuel and Password: samuel 
