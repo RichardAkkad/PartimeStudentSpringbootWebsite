@@ -117,7 +117,7 @@
 
     <!-- Search by Age Range -->
     <div class="form-section">
-      <form th:action="@{/SearchStudentByAgeRange}" method="post" style="width: 100%;">
+      <form th:action="@{/SearchStudentByAgeRange}" method="get" style="width: 100%;">
         <div class="form-group">
           <label for="MinAge">Min Age:</label>
           <input type="number" id="MinAge" name="MinAge" min="1" required/>

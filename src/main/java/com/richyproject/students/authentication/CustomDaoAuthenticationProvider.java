@@ -70,7 +70,7 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
         }
         LocalTime currentTime = LocalTime.now();
         LocalTime startTime=LocalTime.of(8,30);
-        LocalTime endTime=LocalTime.of(23,58);
+        LocalTime endTime=LocalTime.of(23,00);
         if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) {
             System.out.println("4 exception is thrown here ");
 

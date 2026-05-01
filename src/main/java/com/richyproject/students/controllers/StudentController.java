@@ -6,6 +6,7 @@ import com.richyproject.students.model.Student;
 import com.richyproject.students.repository.StudentRepository;
 import com.richyproject.students.services.S3Service;
 import com.richyproject.students.services.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,10 +41,10 @@ public class StudentController {
 
 
     @GetMapping("/AddStudentPage")
-    public String getaddStudentPage(Model model) {
-
+    public String getaddStudentPage(Model model,HttpServletRequest request) {
         model.addAttribute("request", new Student());
-
+        System.out.println(request.getHeader("Cookie"));
+        System.out.println(request.getRequestedSessionId());
         return studentService.addStudentServices();
 
 
@@ -110,16 +111,6 @@ public class StudentController {
 
     }
 
-
-
-
-
-
-
-
-
-
-
     @GetMapping("AverageGrades")
     public String getAverageGrades(){
         return "AverageGrades";
@@ -167,7 +158,7 @@ public class StudentController {
         }
     }
     //******** WHY HAVE I ONLY ONE PART TO THIS?
-    @PostMapping("/SearchStudentByAgeRange")
+    @GetMapping("/SearchStudentByAgeRange")
     public String getstudentAgeRangeResult(@RequestParam String Course, @RequestParam int MinAge, @RequestParam int MaxAge,@RequestParam int MinGrade,@RequestParam int MaxGrade, Model model) {
         return studentService.searchStudentByAgeRangeServices(Course.toLowerCase(), MinAge, MaxAge,MinGrade,MaxGrade, model);
     }
