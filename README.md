@@ -10,4 +10,4 @@ The application includes full CRUD functionality — students can add (including
 
 Live Demo: http://ec2-13-40-31-169.eu-west-2.compute.amazonaws.com:5000
 
-Login credentials — for Student access Username: tony and Password: tony and for Employee access Username: james and Password: james, or can just login using google or github.
+Login credentials — for Student access Username: tony and Password: tony and for Employee access Username: james and Password: james, or can just login using google or github which both have direct Student access without using email address (as I dont have real students in my database who have real email addresses).
