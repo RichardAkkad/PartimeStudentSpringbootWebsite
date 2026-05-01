@@ -14,12 +14,14 @@ import java.io.IOException;
 @Service
 public class S3Service {
 
+
+
+
     @Autowired
     private S3Client s3Client;
 
-    @Value("${aws.bucket.name}")
-    private String bucketName;
-
+@Value("${aws.bucket.name:dummy-bucket}")
+private String bucketName;
     /**
      * Upload a file to S3 bucket
      */

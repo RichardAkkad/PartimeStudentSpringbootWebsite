@@ -6,6 +6,7 @@ import com.richyproject.students.model.Student;
 import com.richyproject.students.repository.StudentRepository;
 import com.richyproject.students.services.S3Service;
 import com.richyproject.students.services.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,10 +41,10 @@ public class StudentController {
 
 
     @GetMapping("/AddStudentPage")
-    public String getaddStudentPage(Model model) {
-
+    public String getaddStudentPage(Model model,HttpServletRequest request) {
         model.addAttribute("request", new Student());
-
+        System.out.println(request.getHeader("Cookie"));
+        System.out.println(request.getRequestedSessionId());
         return studentService.addStudentServices();
 
 

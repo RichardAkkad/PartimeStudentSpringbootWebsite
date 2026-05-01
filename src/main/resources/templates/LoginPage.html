@@ -73,6 +73,45 @@
         background-color: #0056b3;
     }
 
+    .oauth-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        text-align: center;
+        text-decoration: none;
+        box-sizing: border-box;
+    }
+
+    .google-btn {
+        background-color: #db4437;
+        color: white;
+    }
+
+    .google-btn:hover {
+        background-color: #c23321;
+    }
+
+    .github-btn {
+        background-color: #333;
+        color: white;
+    }
+
+    .github-btn:hover {
+        background-color: #111;
+    }
+
+    .divider {
+        text-align: center;
+        margin: 20px 0;
+        color: #aaa;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+    }
+
     .error-message {
         color: #721c24;
         background-color: #f8d7da;
@@ -95,16 +134,12 @@
   </style>
 </head>
 <body>
-<div class="login-container">
-  <form class="login-form" action="/login" method="post">
+<a href="/index" style="text-decoration: none; margin-top: 40px; margin-left: 20px; display: block;">Homepage</a>
+
+<div class="login-container"><form class="login-form" action="/login" method="post">
     <h2>Please sign in</h2>
 
-    <!-- Logout message -->
-    <div th:if="${param.logout}" class="logout-message">
-      You have been logged out.
-    </div>
 
-    <!-- Error message - shows dynamic message from controller -->
     <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}">
     </div>
 
@@ -119,6 +154,12 @@
     </div>
 
     <button type="submit">Sign in</button>
+
+    <div class="divider">or continue with</div>
+
+    <a href="/oauth2/authorization/google" class="oauth-btn google-btn">Sign in with Google</a>
+    <a href="/oauth2/authorization/github" class="oauth-btn github-btn">Sign in with GitHub</a>
+
   </form>
 </div>
 </body>
