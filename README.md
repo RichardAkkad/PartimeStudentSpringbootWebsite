@@ -2,7 +2,7 @@ Website for Part-Time Students
 
 HTML | CSS | Spring Boot | AWS EC2 & S3 | PostgreSQL
 
-As a part-time evening student at Birkbeck University, I felt disconnected from the traditional university experience, particularly when it came to finding accommodation and meeting people on the same course. To solve this, I independently designed and built a full-stack web application to help students find compatible housemates and accommodation.
+As a part-time evening student at Birkbeck University studying a Bsc in Maths and Statistics, I felt disconnected from the traditional university experience, particularly when it came to finding accommodation and meeting people on the same course. To solve this, I independently designed and built a full-stack web application to help students find compatible housemates and accommodation.
 The core features allow students to search free availability slots, find others with similar budgets and courses they could potentially live with, with results filtered to surface the most compatible matches. Students can then contact those people directly to arrange viewings, as well as track their own progress through the platform.
 The application includes full CRUD functionality — students can add (including uploading photos), update, and delete their profiles. It also includes strong Spring Security protocols with custom authentication, role-based access control to restrict sensitive operations, and OAuth2 login for Google and GitHub. Student profile images and data are stored using AWS S3, with the project deployed on an AWS EC2 instance.
 
