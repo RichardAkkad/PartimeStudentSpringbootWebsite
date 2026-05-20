@@ -15,7 +15,7 @@ Employee access — Username: james Password: james
 
 Or login directly via Google or GitHub for Student access
 
-To search for students or employees you can use Id's such as 1, 2... etc where can see existing students and employees. 
+To search for a student or employee, simply enter their ID (e.g. 1, 2, etc.).
 
 What I Learnt & Next Steps
 
