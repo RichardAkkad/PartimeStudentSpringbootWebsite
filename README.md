@@ -15,6 +15,8 @@ Employee access — Username: james Password: james
 
 Or login directly via Google or GitHub for Student access
 
+To search for students or employees you can use Id's such as 1,2 etc where can see existing students and employees. 
+
 What I Learnt & Next Steps
 
 It was a massive challenge deploying a website as I had to first learn a second language being Java then learn Spring Boot following by AWS, PostgreSql, Html, Css, Linux and Github. Even though the website doesnt have the ideal look that I wanted as I didnt use a frontend like React and stuck with HTML and CSS throughout, I am still happy overall with the website and all the features that I have included. Building this project gave me a much deeper understanding of full-stack development end to end, from designing a relational database in PostgreSQL, to securing an application with Spring Security, to deploying on AWS. My primary interest has always been back-end development, and this project reinforced that. I found the most satisfaction in building the authentication system, managing server-side logic, and configuring the AWS infrastructure.
