@@ -1,5 +1,6 @@
 package com.richyproject.students.controllers;
 
+import com.richyproject.students.exceptions.StudentIdNotFoundException;
 import com.richyproject.students.model.StudentWeeklyAvailability;
 import com.richyproject.students.services.StudentAvailabilityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +55,12 @@ import org.springframework.web.bind.annotation.RequestParam;
         }
 
         @PostMapping("/DeleteStudentAvailability")
-        public String deleteStudentsAvailability(@RequestParam(required = false) Long availabilityId,Model model){
+        public String deleteStudentsAvailability(@RequestParam(required = false) Long availabilityId,Model model)throws StudentIdNotFoundException {
             if(availabilityId ==null) {
                 return "DeleteStudentWeeklyAvailabilityPage";
             }
-            try {return studentAvailabilityService.deleteStudentWeeklyAvailabilityServices(availabilityId);}
-            catch (Exception e){
-                System.out.println(e.getMessage());
-                model.addAttribute("errorMessage",e.getMessage());
-                return "errorPage";
-            }
+           return studentAvailabilityService.deleteStudentWeeklyAvailabilityServices(availabilityId);
+
 
         }
 

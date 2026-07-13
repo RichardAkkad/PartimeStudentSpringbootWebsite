@@ -6,6 +6,7 @@ import com.richyproject.students.authentication.CustomDaoAuthenticationProvider;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 
@@ -61,9 +63,7 @@ public class  SecurityConfigiration {
             @Override
             public void customize(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationManagerRequestMatcherRegistry) {
                 authorizationManagerRequestMatcherRegistry
-                        .requestMatchers("/DeleteEmployee", "/AddNewEmployeePage", "/DeleteStudentPage", "/DeleteStudentAccomodationProfile", "/DeleteStudentsAvailability", "/SearchStudent", "/UpdateStudent")//come back to this other delete student endpoint as well"/DeleteStudentsAvailability")
-                        .hasAnyRole("TEACHER")
-                        .requestMatchers("/UpdateAccommodationProfile", "/AccommodationProfile", "/AgeRangePercentage", "/AgeRange", "/AverageGrades", "/FindRoommate", "StudentAvailabilityPage", "/AddStudentPage")
+                        .requestMatchers("/DeleteStudentPage","/UpdateAccommodationProfile", "/AccommodationProfile", "/AgeRangePercentage", "/AgeRange", "/AverageGrades", "/FindRoommate", "StudentAvailabilityPage", "/AddStudentPage")
                         .hasAnyRole("TEACHER", "STUDENT")
                         .anyRequest()//.authenticated();
                         .permitAll();
@@ -102,9 +102,8 @@ public class  SecurityConfigiration {
         return http.authorizeHttpRequests(authorization).formLogin(formLoginCustomizer).exceptionHandling(ex ->
                 ex.accessDeniedHandler((request, response, accessDeniedException) -> {response.sendRedirect("/ErrorPage?error=access");}))
                 .csrf(obj -> obj.disable()).oauth2Login(oauth2 -> oauth2
-                .loginPage("/LoginPage")
-                .userInfoEndpoint(u -> u.userService(oauth2UserService()))
-        ).build();
+                .loginPage("/LoginPage").userInfoEndpoint(u -> u.userService(oauth2UserService()))
+        ).logout(logout->logout.logoutSuccessUrl("/index")).build();
 
                 CustomDaoAuthenticationProvider provider = new CustomDaoAuthenticationProvider();
                 provider.setUserDetailsService(userDetailsService);

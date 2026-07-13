@@ -13,7 +13,7 @@ public class StudentWeeklyAvailability {
     private String course;
 
     // Monday fields
-    private String monday_available;
+    private boolean monday_available;
     private String monday_start1;
     private String monday_end1;
     private String monday_start2;
@@ -22,7 +22,7 @@ public class StudentWeeklyAvailability {
     private String monday_end3;
 
     // Tuesday fields
-    private String tuesday_available;
+    private boolean tuesday_available;
     private String tuesday_start1;
     private String tuesday_end1;
     private String tuesday_start2;
@@ -31,7 +31,7 @@ public class StudentWeeklyAvailability {
     private String tuesday_end3;
 
     // Wednesday fields
-    private String wednesday_available;
+    private boolean wednesday_available;
     private String wednesday_start1;
     private String wednesday_end1;
     private String wednesday_start2;
@@ -40,7 +40,7 @@ public class StudentWeeklyAvailability {
     private String wednesday_end3;
 
     // Thursday fields
-    private String thursday_available;
+    private boolean thursday_available;
     private String thursday_start1;
     private String thursday_end1;
     private String thursday_start2;
@@ -49,7 +49,7 @@ public class StudentWeeklyAvailability {
     private String thursday_end3;
 
     // Friday fields
-    private String friday_available;
+    private boolean friday_available;
     private String friday_start1;
     private String friday_end1;
     private String friday_start2;
@@ -58,7 +58,7 @@ public class StudentWeeklyAvailability {
     private String friday_end3;
 
     // Saturday fields
-    private String saturday_available;
+    private boolean saturday_available;
     private String saturday_start1;
     private String saturday_end1;
     private String saturday_start2;
@@ -67,7 +67,7 @@ public class StudentWeeklyAvailability {
     private String saturday_end3;
 
     // Sunday fields
-    private String sunday_available;
+    private boolean sunday_available;
     private String sunday_start1;
     private String sunday_end1;
     private String sunday_start2;

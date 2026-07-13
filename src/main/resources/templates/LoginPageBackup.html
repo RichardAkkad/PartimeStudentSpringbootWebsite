@@ -130,13 +130,6 @@
             border-top: 1px solid #ddd;
             padding-top: 15px;
         }
-
-        .error-msg {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -160,13 +153,6 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
-
-        <!-- ERROR MESSAGES -->
-        <div th:if="${param.error == 'expired'}" class="error-msg">Your account has expired.</div>
-        <div th:if="${param.error == 'username'}" class="error-msg">Username not recognised.</div>
-        <div th:if="${param.error == 'password'}" class="error-msg">Incorrect password.</div>
-        <div th:if="${param.error == 'hours'}" class="error-msg">Account temporarily locked. Try again in a few hours.</div>
-        <div th:if="${param.error == 'no expiry'}" class="error-msg">Account has no expiry set — contact support.</div>
 
         <button type="submit">Sign in</button>
 

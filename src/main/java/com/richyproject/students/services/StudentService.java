@@ -4,15 +4,15 @@ package com.richyproject.students.services;
 import com.richyproject.students.Enum.Role;
 import com.richyproject.students.exceptions.StudentIdNotFoundException;
 import com.richyproject.students.exceptions.StudentNameNotFoundException;
-import com.richyproject.students.exceptions.ZeroException;
+import com.richyproject.students.exceptions.CourseNotFoundException;
 import com.richyproject.students.model.Student;
 import com.richyproject.students.repository.AccommodationProfileRepository;
 import com.richyproject.students.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -21,12 +21,12 @@ import java.util.function.Function;
 public class StudentService {
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     AccommodationProfileRepository accommodationProfileRepository;
 
-    @Autowired
-    CustomUserEncryptService customUserEncryptService;
 //---------------------------
     @Autowired
     S3Service s3Service;
@@ -38,10 +38,8 @@ public class StudentService {
 
     }
 
-
-    public String saveStudentServices(Student student) throws Exception{
-        String encoded=customUserEncryptService.encodePassword(student.getPassword());//calls my encodePassword method (not a implementation)that contains the "encode" method( where the bencryptpasswordencoder interface implements the passwordencoder class, thats why we create a bencrypt....... bean so we can call the encode method)
-        student.setPassword(encoded);
+    public String saveStudentServices(Student student){
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRole(Role.STUDENT);
             studentRepository.save(student);
             return "PageSavedSuccessfully";
@@ -49,25 +47,15 @@ public class StudentService {
 
     }
 
-
-
-
     public String studentServicesDeletePage(){
         return "DeleteStudentPage";
     }
-
-
-
     public String deleteActualStudent(Integer id) throws StudentNameNotFoundException {
-        Optional<Student> optionalStudent = studentRepository.findById(id);
-        if (optionalStudent.isEmpty()) {
-            throw new StudentNameNotFoundException("username not found, try again");
-        }
-        else {
 
+
+            Student student=studentRepository.findById(id).orElseThrow(()->new StudentNameNotFoundException("username not found please try again"));
 
 //-----------------------------------------------------------------------------
-            Student student = optionalStudent.get();
 
             // Get the picture filename BEFORE deleting the student
             String profilePicture = student.getProfilePicture();
@@ -81,18 +69,8 @@ public class StudentService {
             }
 //------------------------------------------------------------------------------
             return "StudentDeletedSuccessfully";
-        }
+        //}
     }
-
-
-
-
-
-
-
-
-
-
 
     public String findAgefromServices(int age, Model model) {
         List<Student> li = studentRepository.findAll();
@@ -112,18 +90,6 @@ public class StudentService {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public String getAgeRangePercentageResultsServices(int age, Model model){
 
         List<Student> li=studentRepository.findAll();
@@ -131,7 +97,6 @@ public class StudentService {
 
         List<Integer> ageLi =new ArrayList<>();
         li.stream().filter(student->student.getAge()<=age).forEach(student->ageLi.add(student.getAge()));
-
 
         String message= ageLi.isEmpty()?"unfortunately no students of that age "+age+" or less were found":(ageLi.size()*100)/ li.size()+"% of the students are under the age of "+age;
         //dont think there is a point having a ternary sentence here if (inside a try block as not possible to have a arithmetic exception), because if its empty which
@@ -144,44 +109,21 @@ public class StudentService {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public String averageGradeResults(String course,Model model)throws ZeroException {
+    public String averageGradeResults(String course,Model model)throws CourseNotFoundException {
 
         List<Student> li=studentRepository.findAll();
 
-
         OptionalDouble average=li.stream().filter(obj->obj.getCourse().equals(course)).mapToInt(Student::getGrade).average();
-
-        if(average.isEmpty()) {
-            throw new ZeroException("cant divide by zero");
-        }
-
 
         //"average" returns a OptionalDouble, but not a raw Double , if you want the raw double use method "getAsDouble" and cannot return a  Optional
         // or use "isPresent()" if the OptionalDOuble is empty
-        String message = "the average grade for " + course + " is " + average.getAsDouble()+"%";
-        model.addAttribute("averageMessage", message.toString());//to String is called here implicitly on message(thymleaf invokes the toString method), but "message" is already a string which concatinated.
+        String message = "the average grade for " + course + " is " + average.orElseThrow(()->new CourseNotFoundException("no students found for that course"))
+        +"%";
+        model.addAttribute("averageMessage", message);//to String is called here implicitly on message(thymleaf invokes the toString method), but "message" is already a string which concatinated.
         return "AverageGradeResults";// if use a primitive then can use that instead to use this String message in th:text thymleaf it needs to be assigned to a variable in this case "averageMessage"
 
 
-
-
 }
-
-
-
-
-
 
 //----------------------------------------------------------
 public String searchForStudentServices(){
@@ -190,22 +132,19 @@ public String searchForStudentServices(){
 
 public String studentSearchIdResultServices(int id,Model model) throws StudentNameNotFoundException{
 
-    Optional<Student> optionalStudent =studentRepository.findById(id);
-    model.addAttribute("student",optionalStudent.get());
 
-    if(optionalStudent.isEmpty()){
-        throw new StudentNameNotFoundException("username not found, try again");
-    }
-    List<Student> result = Arrays.asList(optionalStudent.get());
+    Student student=studentRepository.findById(id).orElseThrow(()->new StudentNameNotFoundException("user not found, try again"));
+
+    List<Student> result = Arrays.asList(student);
     model.addAttribute("students", result);
 
 
     return "StudentResults";
 }
-public String searchStudentByAgeRangeServices(String Course,int MinAge, int MaxAge,int MinGrade, int MaxGrade, Model model) {
+public String searchStudentByAgeRangeServices(String Course,int minAge, int maxAge,int minGrade, int maxGrade, Model model) {
     List<Student> studentList = studentRepository.findAll()
-            .stream().filter(obj->obj.getAge() >= MinAge && obj.getAge()<=MaxAge).
-            filter(obj->obj.getGrade()>=MinGrade && obj.getGrade()<=MaxGrade).
+            .stream().filter(obj->obj.getAge() >= minAge && obj.getAge()<=maxAge).
+            filter(obj->obj.getGrade()>=minGrade && obj.getGrade()<=maxGrade).
             filter(obj->obj.getCourse().equals(Course)).toList();
 
     model.addAttribute("students",studentList);
@@ -219,26 +158,24 @@ public String searchStudentByAgeRangeServices(String Course,int MinAge, int MaxA
         return "UpdateStudentPage";
 
       }
+
+    public <T> T orDefault(T value,T databaseValue){
+            return value==null || value.toString().trim().isEmpty()?databaseValue:value;
+        }
+
     public String updateStudentServices(Integer id,String firstName,String surname, Integer age, String course, Integer grade,String username,String local_Date,Model model) throws StudentIdNotFoundException{
-        Optional<Student> optionalStudent=studentRepository.findById(id);
-        if(optionalStudent.isPresent()){
-            optionalStudent.get().setId(id!=null?id:optionalStudent.get().getId());
-            optionalStudent.get().setFirstName(firstName!=null?firstName:optionalStudent.get().getFirstName());
-            optionalStudent.get().setSurname(surname!=null?surname:optionalStudent.get().getSurname());
-            optionalStudent.get().setAge(age!=null?age:optionalStudent.get().getAge());
-            optionalStudent.get().setCourse(course!=null?course:optionalStudent.get().getCourse());
-            optionalStudent.get().setGrade(grade!=null?grade:optionalStudent.get().getGrade());
-            optionalStudent.get().setUsername(username!=null?username:optionalStudent.get().getUsername());
-            optionalStudent.get().setLocalDate(local_Date!=null?LocalDate.parse(local_Date):optionalStudent.get().getLocalDate());
-            studentRepository.save(optionalStudent.get());
-            System.out.println("and working here as well");
+        Student student=studentRepository.findById(id).orElseThrow(()->new StudentIdNotFoundException("there was no student found with that id, please try again"));
+            student.setFirstName(orDefault(firstName,student.getFirstName()));
+            student.setSurname(orDefault(surname,student.getSurname()));
+            student.setAge(orDefault(age, student.getAge()));
+            student.setCourse(orDefault(course,student.getCourse()));
+            student.setGrade(orDefault(grade, student.getGrade()));
+            student.setUsername(orDefault(username,student.getUsername()));
+            student.setLocalDate(local_Date!=null?LocalDate.parse(local_Date):student.getLocalDate());
+            studentRepository.save(student);
+
             //as we are using the same "id" then we are not creating a new only updating regardless if we use post or patch but by convention patch is better for updating
-        }
 
-
-        else {
-            throw new StudentIdNotFoundException("there was no student found with that id, please try again");
-        }
         return "PageSavedSuccessfully";
 
         }

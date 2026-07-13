@@ -18,17 +18,14 @@ import java.io.IOException;
 
 
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
-
-//the locked exceptions are thrown back up the call stack to this custom  method
+        // if exception is thrown from the loadbyusername or possibly the retrieveuser method it is sent here via the exception parameter below
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
                 if (exception instanceof LockedException && exception.getMessage().contains("expired")) {
-                        //the above means the object assigned to exception is instance of lockedException
                         response.sendRedirect("/LoginPage?error=expired");
 
                 }
                 else if(exception instanceof LockedException && exception.getMessage().contains("no expiry")) {
-                        //the above means the object assigned to exception is instance of lockedException
                         response.sendRedirect("/LoginPage?error=no expiry");
 
                 }
@@ -49,7 +46,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
                 }
 
 
-
+                return;
 
 
 

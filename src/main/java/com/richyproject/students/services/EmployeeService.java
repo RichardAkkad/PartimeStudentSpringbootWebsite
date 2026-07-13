@@ -20,7 +20,7 @@ public class EmployeeService {//loadByUsername method, like the CustomUserDetail
     EmployeeRepository employeeRepository;
 
     @Autowired
-    CustomUserEncryptService customUserEncryptService;
+    PasswordEncoder passwordEncoder;
 
 
     public String addEmployeeServices(Model model){
@@ -29,8 +29,8 @@ public class EmployeeService {//loadByUsername method, like the CustomUserDetail
     }
 
     public String saveEmployeeServices(Employee employee){
-        String encoded =customUserEncryptService.encodePassword(employee.getPassword());
-        employee.setPassword(encoded);
+
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         employee.setRole(Role.TEACHER);
         employeeRepository.save(employee);
 
@@ -52,15 +52,7 @@ public class EmployeeService {//loadByUsername method, like the CustomUserDetail
 
 
     public String deleteActualEmployeeServices(int id) throws EmployeeNameNotFoundException{
-        Optional<Employee> optionalEmployee= employeeRepository.findById(id);
-        if (optionalEmployee.isPresent()){
-            employeeRepository.delete(optionalEmployee.get());
-        }
-        else{
-
-            throw new EmployeeNameNotFoundException("this id does not exist");
-
-        }
+      Employee employee=employeeRepository.findById(id).orElseThrow(()->new EmployeeNameNotFoundException("this id does not exist"));
         return "StudentDeletedSuccessfully";
 
     }
