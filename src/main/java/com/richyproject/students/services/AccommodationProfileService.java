@@ -43,13 +43,11 @@ public class AccommodationProfileService {
         profile.setCourse(profile.getCourse().toLowerCase());
         profile.setEmail(profile.getEmail().toLowerCase());
         profile.setMyGender(profile.getMyGender().toLowerCase());
-        //using the "profile" here which points to the same object as "acccommProfile" that had just binded to the fields in the method that called this method
-        //already logged in at this point so can retrieve the username from the database which is what currentUser is used for and now we have the object from the database
-        Optional<Student> student = studentRepository.findByUsername(currentUser.getUsername());
-        profile.setStudent(student.get());//when put the student object in the argument of setStudent ("student" is a field from the accomm....) it then automatically know to save the "key" being the
-        // id of the student object, ie JPA automatically extracts the student.getId() and stores it in the student_id column, you don't have to manually get the ID
-        accommodationProfileRepository.save(profile);//then we save the accomodationProfile variable (that is assigned to the accomodationProfile object) as a whole
-        //when getting "student_id" from the database it returns as a Student object and when saving Student object it saves as "student_id" as a id number in the database i think?
+        profile.setStudent(
+                studentRepository.findByUsername(currentUser.getUsername())
+                        .orElseThrow(() -> new UsernameNotFoundException("username not found"))
+        );
+        accommodationProfileRepository.save(profile);
         return "PageSavedSuccessfully";
 
 
