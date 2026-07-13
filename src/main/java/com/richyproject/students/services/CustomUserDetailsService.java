@@ -78,27 +78,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
 
-        //**HOW CAN I RETURN A HTML PAGE IF I HAVE EXCEPTION ABOVE AND THE METHOD THAT THE EXCEPTION IS THROWN BACK TO IS A BUILT IN METHOD THAT IS READONLY ??
 
 
-        //"password("{noop}"+student.get().....if we are not using a encode method then need this i beleive
-        //note that the dao object(in the authenticate method)is used to call the authenticate method, and loadByUsername is used in the authenticate method
 
 
     }
 
 
 
-/* Spring Security filter chain:
-1. User submits login form
-2. Calls your loadUserByUsername() method
-3. Gets back the UserDetails object you built
-4. Compares passwords
-5. If match → creates Authentication object (but first uses the unauthenticated token and the userDetails object and compares the passwords of these 2 and if correct then creates a authentication object
-6. Stores Authentication in SecurityContext
-7. User is now "logged in"
-8. For future requests → checks SecurityContext to see if user is authenticated
-*/
+
 
 
     }

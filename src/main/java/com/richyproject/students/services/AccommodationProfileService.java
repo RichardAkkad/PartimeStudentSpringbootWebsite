@@ -152,22 +152,11 @@ public class AccommodationProfileService {
 
 
 }
-/*
 
 
 
 
- With my strong problem solving skills (as I have completed a mathematics and statistics degree ) and my newly learnt coding knowledge that i
- have taught myself in my spare time after work  as well as my dedication to overcoming obstacles and  learning new technologies, I believe I can contribute well as part of the team at Palantir
 
 
 
-I'm interested in Palantir's Software Engineer role because it combines  technical challenges with meaningful impact.
-What draws me most is working on complex data processing and software architecture problems while collaborating with engineers.
-This role allows for technical specialization, which aligns with my passion for creating efficient solutions to challenging problems.
-I'm excited to contribute to products solving important global challenges while growing my expertise in this demanding environment.
-I feel that I will fit in well as part of the team because of my enthusiasm to learning new technologies, working part of a team and
-contribute new ideas that be implemented in future projects
 
-
-*/

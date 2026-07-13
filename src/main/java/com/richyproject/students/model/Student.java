@@ -16,7 +16,7 @@ public class Student {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     private String firstName;
     private String surname;
@@ -35,6 +35,7 @@ public class Student {
     private String profilePicture;
 
     private LocalDate localDate;
+
 
 
 

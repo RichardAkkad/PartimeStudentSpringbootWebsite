@@ -12,13 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StudentAvailabilityService {
@@ -45,106 +40,86 @@ public class StudentAvailabilityService {
         double searchStart=Double.parseDouble(startTime);
         double searchEnd=Double.parseDouble(endTime);
 
-        List<StudentWeeklyAvailability> studentWeeklyAvailabilityList=studentWeeklyAvailabilityRepository.findAll();
-        System.out.println(studentWeeklyAvailabilityList.size());
+        List<StudentWeeklyAvailability> studentWeeklyAvailabilityList=studentWeeklyAvailabilityRepository.findAll();//all of the students go in the list here
 
-        List<String> studentWeeklyAvailabilityListOfResults =new ArrayList<>(Arrays.asList());
+        List<String> studentWeeklyAvailabilityListOfResults =new ArrayList<>();//only certain students left in here now
 
 
-        for(StudentWeeklyAvailability studentsAvailability:studentWeeklyAvailabilityList){
-                checkSlots(studentsAvailability,day,searchStart,searchEnd,studentWeeklyAvailabilityList, studentWeeklyAvailabilityListOfResults);
+        for(StudentWeeklyAvailability studentAvailability:studentWeeklyAvailabilityList){
+                checkSlots(studentAvailability,day,searchStart,searchEnd,studentWeeklyAvailabilityList, studentWeeklyAvailabilityListOfResults);
 
         }
 
         model.addAttribute("students",studentWeeklyAvailabilityListOfResults);
         return "StudentAvailabilitySearchResults";
 
-
-
     }
 
-    public  void  checkSlots(StudentWeeklyAvailability studentsAvailability,String day,Double searchStart, Double searchEnd,List<StudentWeeklyAvailability> studentWeeklyAvailabilityList, List<String>studentWeeklyAvailabilityListOfResults) {
-        if("monday".equals(day) && "on".equals(studentsAvailability.getMonday_available())||"tuesday".equals(day) && "on".equals(studentsAvailability.getTuesday_available())||
-                "wednesday".equals(day) && "on".equals(studentsAvailability.getWednesday_available())||"thursday".equals(day) && "on".equals(studentsAvailability.getThursday_available())||
-                "friday".equals(day) && "on".equals(studentsAvailability.getFriday_available())||"saturday".equals(day) && "on".equals(studentsAvailability.getSaturday_available())||
-                "sunday".equals(day) && "on".equals(studentsAvailability.getSunday_available())){
+    public  void  checkSlots(StudentWeeklyAvailability studentsAvailability,String day,double searchStart, double searchEnd,List<StudentWeeklyAvailability> studentWeeklyAvailabilityList, List<String>studentWeeklyAvailabilityListOfResults) {
+
+        boolean available =switch (day){
+                case "monday"->studentsAvailability.isMonday_available();
+                case "tuesday" -> studentsAvailability.isTuesday_available();
+                case "wednesday" -> studentsAvailability.isWednesday_available();
+                case "thursday" -> studentsAvailability.isThursday_available();
+                case "friday" -> studentsAvailability.isFriday_available();
+                case "saturday" -> studentsAvailability.isSaturday_available();
+                case "sunday" -> studentsAvailability.isSunday_available();
+                default->false;
+        };
+        if(available){
 
                    checkTimeConstraints(studentsAvailability,day,searchStart,searchEnd,studentWeeklyAvailabilityList,studentWeeklyAvailabilityListOfResults);
         }
 
     }
-
-    public void  checkTimeConstraints(StudentWeeklyAvailability studentAvailability, String day,Double searchStart,Double searchEnd,List<StudentWeeklyAvailability> studentWeeklyAvailabilityList,List<String> studentWeeklyAvailabilityListOfResults){
-       boolean check=false;
-
-        if(day.equals("monday")){
-                         if ((Double.parseDouble(studentAvailability.getMonday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getMonday_end1().replace(":","."))>=searchEnd) && studentAvailability.getMonday_start1()!="")
-                                || (Double.parseDouble(studentAvailability.getMonday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getMonday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getMonday_start2()!="")
-                                || (Double.parseDouble(studentAvailability.getMonday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getMonday_end3().replace(":","."))>=
-                                searchEnd)&&studentAvailability.getMonday_start1()!="")){
-                                check=true;
-                            }
-        }
-        if(day.equals("tuesday")){
-            if ((Double.parseDouble(studentAvailability.getTuesday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getTuesday_end1().replace(":","."))>=searchEnd) && studentAvailability.getTuesday_start1()!="")
-                    || (Double.parseDouble(studentAvailability.getTuesday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getTuesday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getTuesday_start2()!="")
-                    || (Double.parseDouble(studentAvailability.getTuesday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getTuesday_end3().replace(":","."))>=
-                    searchEnd)&&studentAvailability.getTuesday_start3()!="")){
-                check=true;
-            }
-        }
-        if(day.equals("wednesday")){
-            if ((Double.parseDouble(studentAvailability.getWednesday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getWednesday_end1().replace(":","."))>=searchEnd) && studentAvailability.getWednesday_start1()!="")
-                    || (Double.parseDouble(studentAvailability.getWednesday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getWednesday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getWednesday_start2()!="")
-                    || (Double.parseDouble(studentAvailability.getWednesday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getWednesday_end3().replace(":","."))>=
-                    searchEnd)&&studentAvailability.getWednesday_start3()!="")){
-                check=true;
-            }
-        }
-        if(day.equals("thursday")){
-            if ((Double.parseDouble(studentAvailability.getThursday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getThursday_end1().replace(":","."))>=searchEnd) && studentAvailability.getThursday_start1()!="")
-                    || (Double.parseDouble(studentAvailability.getThursday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getThursday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getThursday_start2()!="")
-                    || (Double.parseDouble(studentAvailability.getThursday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getThursday_end3().replace(":","."))>=
-                    searchEnd)&&studentAvailability.getThursday_start3()!="")){
-                check=true;
-            }
-        }
-        if(day.equals("friday")){
-            if ((Double.parseDouble(studentAvailability.getFriday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getFriday_end1().replace(":","."))>=searchEnd) && studentAvailability.getFriday_start1()!="")
-                    || (Double.parseDouble(studentAvailability.getFriday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getFriday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getFriday_start2()!="")
-                    || (Double.parseDouble(studentAvailability.getFriday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getFriday_end3().replace(":","."))>=
-                    searchEnd)&&studentAvailability.getFriday_start3()!="")){
-                check=true;
-            }
-        }
-        if(day.equals("saturday")){
-            if ((Double.parseDouble(studentAvailability.getSaturday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getSaturday_end1().replace(":","."))>=searchEnd) && studentAvailability.getSaturday_start1()!="")
-                    || (Double.parseDouble(studentAvailability.getSaturday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getSaturday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getSaturday_start2()!="")
-                    || (Double.parseDouble(studentAvailability.getSaturday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getSaturday_end3().replace(":","."))>=
-                    searchEnd)&&studentAvailability.getSaturday_start3()!="")){
-                check=true;
-            }
-        }
-        if(day.equals("sunday")){
-            if ((Double.parseDouble(studentAvailability.getSunday_start1().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getSunday_end1().replace(":","."))>=searchEnd) && studentAvailability.getSunday_start1()!="")
-                    || (Double.parseDouble(studentAvailability.getSunday_start2().replace(":","."))<=searchStart && (Double.parseDouble(studentAvailability.getSunday_end2().replace(":","."))>=searchEnd)&&studentAvailability.getSunday_start2()!="")
-                    || (Double.parseDouble(studentAvailability.getSunday_start3().replace(":","."))<= searchStart&& (Double.parseDouble(studentAvailability.getSunday_end3().replace(":","."))>=
-                    searchEnd)&&studentAvailability.getSunday_start3()!="")){
-                check=true;
-            }
-        }
+    private record TimeSlot(String start, String end) {}
+    public  Map<String ,List<StudentAvailabilityService.TimeSlot>> weeklySlots(StudentWeeklyAvailability a) {
+        return  Map.of("monday", List.of(new TimeSlot(a.getMonday_start1(), a.getMonday_end1()),
+                                                     new TimeSlot(a.getMonday_start2(), a.getMonday_end2()),
+                                                     new TimeSlot(a.getMonday_start3(), a.getMonday_end3())),
+                                                  "tuesday",   List.of(new TimeSlot(a.getTuesday_start1(), a.getTuesday_end1()),
+                                                    new TimeSlot(a.getTuesday_start2(), a.getTuesday_end2()),
+                                                    new TimeSlot(a.getTuesday_start3(), a.getTuesday_end3())),
+                "wednesday", List.of(new TimeSlot(a.getWednesday_start1(), a.getWednesday_end1()),
+                new TimeSlot(a.getWednesday_start2(), a.getWednesday_end2()),
+                new TimeSlot(a.getWednesday_start3(), a.getWednesday_end3())),
+                "thursday",  List.of(new TimeSlot(a.getThursday_start1(), a.getThursday_end1()),
+                new TimeSlot(a.getThursday_start2(), a.getThursday_end2()),
+                new TimeSlot(a.getThursday_start3(), a.getThursday_end3())),
+                "friday",    List.of(new TimeSlot(a.getFriday_start1(), a.getFriday_end1()),
+                new TimeSlot(a.getFriday_start2(), a.getFriday_end2()),
+                new TimeSlot(a.getFriday_start3(), a.getFriday_end3())),
+                "saturday",  List.of(new TimeSlot(a.getSaturday_start1(), a.getSaturday_end1()),
+                new TimeSlot(a.getSaturday_start2(), a.getSaturday_end2()),
+                new TimeSlot(a.getSaturday_start3(), a.getSaturday_end3())),
+                "sunday",    List.of(new TimeSlot(a.getSunday_start1(), a.getSunday_end1()),
+                new TimeSlot(a.getSunday_start2(), a.getSunday_end2()),
+                new TimeSlot(a.getSunday_start3(), a.getSunday_end3()))
+    );
 
 
 
-
-
-    if(check) {
-
-        Student findStudent=studentAvailability.getStudent();//retreiving produces a object a putting in the database is a "int" or a postgres "int" equivalent
-        AccommodationProfile accommodation=accommodationProfileRepository.findByStudent(findStudent);
-        System.out.println(accommodation);
-        studentWeeklyAvailabilityListOfResults.add(accommodation.getEmail());
     }
+
+    public void  checkTimeConstraints(StudentWeeklyAvailability studentAvailability, String day,double searchStart,double searchEnd,List<StudentWeeklyAvailability> studentWeeklyAvailabilityList,List<String> studentWeeklyAvailabilityListOfResults){
+                List<TimeSlot> slots= weeklySlots(studentAvailability).get(day.toLowerCase());
+                boolean check=false;
+                for(TimeSlot slot:slots){
+                    if(slot.start() != null && !slot.start().isEmpty()
+                            && Double.parseDouble(slot.start().replace(":","."))<=searchStart &&
+                            Double.parseDouble(slot.end().replace(":","."))>=searchEnd){
+                       check=true;
+                        break;
+                    }
+                }
+
+                if(check) {
+
+                    Student findStudent=studentAvailability.getStudent();//retreiving produces a object a putting in the database is a "int" or a postgres "int" equivalent
+                    AccommodationProfile accommodation=accommodationProfileRepository.findByStudent(findStudent);
+                    studentWeeklyAvailabilityListOfResults.add(accommodation.getEmail());
+                    }
 
     }
 

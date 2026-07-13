@@ -51,7 +51,6 @@ public class EmployeeController {
             catch(EmployeeNameNotFoundException e){
 
                 model.addAttribute("errorMessage",e.getMessage());
-                System.out.println("Exception occured: "+ e.getMessage());
                 return "ErrorPage";
 
 

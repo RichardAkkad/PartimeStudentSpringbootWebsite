@@ -4,22 +4,17 @@ import com.richyproject.students.model.Employee;
 import com.richyproject.students.model.Student;
 import com.richyproject.students.repository.EmployeeRepository;
 import com.richyproject.students.repository.StudentRepository;
-import com.richyproject.students.services.CustomUserDetailsService;
-import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.security.authentication.BadCredentialsException;
+
 import org.springframework.security.authentication.LockedException;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
+
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 
 import java.time.LocalDate;
@@ -42,8 +37,6 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        //System.out.println(authentication.getCredentials());
-        //System.out.println(authentication.getName());//this has to be the login username surely?, not sure what getCredentials is for.....
 
         Optional<Student> getStudent = studentRepository.findByUsername(authentication.getName());// this object if found is however from the database where we can get the name
         Optional<Employee> getEmployee = employeeRepository.findByUsername(authentication.getName());
@@ -70,7 +63,7 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
         }
         LocalTime currentTime = LocalTime.now();
         LocalTime startTime=LocalTime.of(8,30);
-        LocalTime endTime=LocalTime.of(23,00);
+        LocalTime endTime=LocalTime.of(9,00);
         if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) {
             System.out.println("4 exception is thrown here ");
 

@@ -87,8 +87,12 @@
     </style>
 </head>
 <body>
-<a href="/index" style="text-decoration: none;">Homepage</a>
-    <h2>Find Study Partners</h2>
+<a href="/index" style="text-decoration: none; margin-top: 40px; margin-left: 20px; display: block; color: black;">Homepage</a>
+
+<form action="/logout" method="post" style="margin: 0;">
+    <button type="submit" style="text-decoration: none; margin-top: 10px; margin-left: 20px; display: block; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; font-size: inherit; color: black;">Logout</button>
+</form>
+<h2>Find Study Partners</h2>
     <p class="subtitle">Search for students with overlapping availability</p>
 
     <form method="get" action="/StudentAvailabilitySearch" class="search-form">
@@ -138,7 +142,7 @@
 </div>
 
 <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
+    document.querySelector('.search-form').addEventListener('submit', function(e) {
         const startTime = document.getElementById('startTime').value;
         const endTime = document.getElementById('endTime').value;
 
