@@ -62,7 +62,7 @@ public class AccommodationProfileController {
     @PostMapping("/SaveUpdatedAccommodationProfile")
     public String saveUpdatedAccommodationProfilePage(@RequestParam String email,@RequestParam(required = false) Integer age,@RequestParam String gender,@RequestParam String course,
                                                  @RequestParam String smoker,@RequestParam String petOwner,@RequestParam String dietaryPattern, @RequestParam String overnightGuests,
-                                                 @RequestParam(required = false)Double minBudget,@RequestParam(required = false)Double maxBudget,@AuthenticationPrincipal UserDetails currentUser){
+                                                 @RequestParam(required = false)Double minBudget,@RequestParam(required = false)Double maxBudget,@AuthenticationPrincipal UserDetails currentUser)throws StudentIdNotFoundException{
 
 
 
