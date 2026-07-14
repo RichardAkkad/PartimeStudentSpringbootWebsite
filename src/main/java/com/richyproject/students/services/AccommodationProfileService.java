@@ -106,7 +106,7 @@ public class AccommodationProfileService {
         return value == null || value.toString().trim().isEmpty() ? databaseValue : value;
     }
 
-    public String saveUpdatedAccommodationProfilePageServices(String email, Integer age, String gender, String course, String smoker, String petOwner, String dietaryPattern, String overnightGuests,
+    public String saveUpdatedAccomodationProfilePageServices(String email, Integer age, String gender, String course, String smoker, String petOwner, String dietaryPattern, String overnightGuests,
                                                               Double minBudget, Double maxBudget, UserDetails currentUser) throws StudentIdNotFoundException{
 
          AccommodationProfile accommodationProfile= accommodationProfileRepository.findByStudentUsername(currentUser.getUsername()).orElseThrow(()->new StudentIdNotFoundException("student id not found"));
@@ -119,11 +119,10 @@ public class AccommodationProfileService {
         accommodationProfile.setHasPets(orDefault(petOwner,accommodationProfile.getMyGender()));
         accommodationProfile.setDietaryPattern(orDefault(dietaryPattern,accommodationProfile.getMyGender()));
         accommodationProfile.setGuests(orDefault(gender,accommodationProfile.getGuests()));
-
-
-            accommodationProfile.setAge(age == null || age.toString().trim().isEmpty()? accommodationProfile.getAge() : age);
-            accommodationProfile.setMinBudget(minBudget == null || minBudget.toString().trim().isEmpty() ? accommodationProfile.getMinBudget() : minBudget);
-            accommodationProfile.setMaxBudget(maxBudget == null || maxBudget.toString().trim().isEmpty()? accommodationProfile.getMaxBudget(): maxBudget);
+         accommodationProfile.setAge(orDefault(age,accommodationProfile.getAge()));
+        accommodationProfile.setMinBudget(orDefault(minBudget,accommodationProfile.getMinBudget()));
+        accommodationProfile.setMaxBudget(orDefault(maxBudget,accommodationProfile.getMaxBudget())); 
+        
             accommodationProfileRepository.save(accommodationProfile);
 
 
