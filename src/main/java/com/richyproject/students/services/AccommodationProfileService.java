@@ -101,7 +101,10 @@ public class AccommodationProfileService {
     public String updateAccommodationProfilePageServices() {
         return "UpdateAccommodationProfilePage";
     }
+ public <T> T orDefault(T value, T databaseValue) {
 
+        return value == null || value.toString().trim().isEmpty() ? databaseValue : value;
+    }
 
     public String saveUpdatedAccommodationProfilePageServices(String email, Integer age, String gender, String course, String smoker, String petOwner, String dietaryPattern, String overnightGuests,
                                                               Double minBudget, Double maxBudget, UserDetails currentUser) {
