@@ -107,7 +107,7 @@ public class AccommodationProfileService {
     }
 
     public String saveUpdatedAccommodationProfilePageServices(String email, Integer age, String gender, String course, String smoker, String petOwner, String dietaryPattern, String overnightGuests,
-                                                              Double minBudget, Double maxBudget, UserDetails currentUser) {
+                                                              Double minBudget, Double maxBudget, UserDetails currentUser) throws StudentIdNotFoundException{
 
          AccommodationProfile accommodationProfile= accommodationProfileRepository.findByStudentUsername(currentUser.getUsername()).orElseThrow(()->new StudentIdNotFoundException("student id not found"));
 
