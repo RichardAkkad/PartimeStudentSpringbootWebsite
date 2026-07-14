@@ -106,23 +106,25 @@ public class AccommodationProfileService {
     public String saveUpdatedAccommodationProfilePageServices(String email, Integer age, String gender, String course, String smoker, String petOwner, String dietaryPattern, String overnightGuests,
                                                               Double minBudget, Double maxBudget, UserDetails currentUser) {
 
-        Optional<AccommodationProfile> optionalAccommodationProfile = accommodationProfileRepository.findByStudentUsername(currentUser.getUsername());
-
-        if (optionalAccommodationProfile.isPresent()) {
-            optionalAccommodationProfile.get().setEmail(email.trim().equals("") ? optionalAccommodationProfile.get().getEmail() : email.toLowerCase());
-            optionalAccommodationProfile.get().setMyGender(gender.trim().equals("") ? optionalAccommodationProfile.get().getMyGender() : gender.toLowerCase());
-            optionalAccommodationProfile.get().setCourse(course.trim().equals("") ? optionalAccommodationProfile.get().getCourse() : course.toLowerCase());
-            optionalAccommodationProfile.get().setSmoker(smoker.trim().equals("") ? optionalAccommodationProfile.get().getSmoker() : smoker.toLowerCase());
-            optionalAccommodationProfile.get().setHasPets(petOwner.trim().equals("") ? optionalAccommodationProfile.get().getHasPets() : petOwner.toLowerCase());
-            optionalAccommodationProfile.get().setDietaryPattern(dietaryPattern.trim().equals("") ? optionalAccommodationProfile.get().getDietaryPattern() : dietaryPattern.toLowerCase());
-            optionalAccommodationProfile.get().setGuests(overnightGuests.trim().equals("") ? optionalAccommodationProfile.get().getGuests() : overnightGuests.toLowerCase());
-            optionalAccommodationProfile.get().setAge(age == null ? optionalAccommodationProfile.get().getAge() : age);
-            optionalAccommodationProfile.get().setMinBudget(minBudget == null ? optionalAccommodationProfile.get().getMinBudget() : minBudget);
-            optionalAccommodationProfile.get().setMaxBudget(maxBudget == null ? optionalAccommodationProfile.get().getMinBudget() : maxBudget);
-            accommodationProfileRepository.save(optionalAccommodationProfile.get());
+         AccommodationProfile accommodationProfile= accommodationProfileRepository.findByStudentUsername(currentUser.getUsername()).orElseThrow(()->new StudentIdNotFoundException("student id not found"));
 
 
-        }
+        accommodationProfile.setEmail(orDefault(email,accommodationProfile.getEmail()));
+        accommodationProfile.setMyGender(orDefault(gender,accommodationProfile.getMyGender()));
+        accommodationProfile.setCourse(orDefault(course,accommodationProfile.getCourse()));
+        accommodationProfile.setSmoker(orDefault(smoker,accommodationProfile.getSmoker()));
+        accommodationProfile.setHasPets(orDefault(petOwner,accommodationProfile.getMyGender()));
+        accommodationProfile.setDietaryPattern(orDefault(dietaryPattern,accommodationProfile.getMyGender()));
+        accommodationProfile.setGuests(orDefault(gender,accommodationProfile.getGuests()));
+
+
+            accommodationProfile.setAge(age == null || age.toString().trim().isEmpty()? accommodationProfile.getAge() : age);
+            accommodationProfile.setMinBudget(minBudget == null || minBudget.toString().trim().isEmpty() ? accommodationProfile.getMinBudget() : minBudget);
+            accommodationProfile.setMaxBudget(maxBudget == null || maxBudget.toString().trim().isEmpty()? accommodationProfile.getMaxBudget(): maxBudget);
+            accommodationProfileRepository.save(accommodationProfile);
+
+
+
         return "PageSavedSuccessfully";
     }
            public String deleteAccommodationProfileServices(Integer accommodationProfileId)throws StudentNameNotFoundException{
