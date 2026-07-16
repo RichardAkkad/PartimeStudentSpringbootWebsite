@@ -73,11 +73,11 @@ public class StudentService {
     }
 
     public String findAgefromServices(int age, Model model) {
-        List<Student> li = studentRepository.findAll();
+        List<Student> studentList = studentRepository.findAll();
 
         Function<Student, String> lambVar = student -> String.valueOf(student.getId());
 
-        List<String> info = li.stream().filter(student  -> student.getAge() < age).map(Student::getId).map(String::valueOf).toList();
+        List<String> info = studentList.stream().filter(student  -> student.getAge() < age).map(Student::getId).map(String::valueOf).toList();
 
 
         String message="the following id's are for the student's whos age is " + age + " and below is..... "+ String.join(", ",info);
@@ -92,13 +92,13 @@ public class StudentService {
 
     public String getAgeRangePercentageResultsServices(int age, Model model){
 
-        List<Student> li=studentRepository.findAll();
+        List<Student> studentList=studentRepository.findAll();
 
 
-        List<Integer> ageLi =new ArrayList<>();
-        li.stream().filter(student->student.getAge()<=age).forEach(student->ageLi.add(student.getAge()));
+        List<Integer> ageList =new ArrayList<>();
+        studentList.stream().filter(student->student.getAge()<=age).forEach(student->ageList.add(student.getAge()));
 
-        String message= ageLi.isEmpty()?"unfortunately no students of that age "+age+" or less were found":(ageLi.size()*100)/ li.size()+"% of the students are under the age of "+age;
+        String message= ageList.isEmpty()?"unfortunately no students of that age "+age+" or less were found":(ageList.size()*100)/ studentList.size()+"% of the students are under the age of "+age;
         //dont think there is a point having a ternary sentence here if (inside a try block as not possible to have a arithmetic exception), because if its empty which
         //means ageLi.isEmpty size is zero so that takes care of the 0, therefore "ageLi.size()*100)/li.size()" cannot be "0/li.size()"
 
@@ -179,6 +179,42 @@ public String searchStudentByAgeRangeServices(String Course,int minAge, int maxA
         return "PageSavedSuccessfully";
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 
