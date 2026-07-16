@@ -129,18 +129,17 @@ public class StudentService {
 public String searchForStudentServices(){
     return "StudentSearchPage";
 }
+    
 
 public String studentSearchIdResultServices(int id,Model model) throws StudentIdNotFoundException{
 
-
-    Student student=studentRepository.findById(id).orElseThrow(()->new StudenIdNotFoundException("user not found, try again"));
-
-    List<Student> result = Arrays.asList(student);
-    model.addAttribute("students", result);
-
+    model.addAttribute("students",studentRepository.findById(id).orElseThrow(()->new StudenIdNotFoundException("student id not found, please try again")));
 
     return "StudentResults";
 }
+
+
+    
 public String searchStudentByAgeRangeServices(String Course,int minAge, int maxAge,int minGrade, int maxGrade, Model model) {
     List<Student> studentList = studentRepository.findAll()
             .stream().filter(obj->obj.getAge() >= minAge && obj.getAge()<=maxAge).
