@@ -130,10 +130,10 @@ public String searchForStudentServices(){
     return "StudentSearchPage";
 }
 
-public String studentSearchIdResultServices(int id,Model model) throws StudentNameNotFoundException{
+public String studentSearchIdResultServices(int id,Model model) throws StudentIdNotFoundException{
 
 
-    Student student=studentRepository.findById(id).orElseThrow(()->new StudentNameNotFoundException("user not found, try again"));
+    Student student=studentRepository.findById(id).orElseThrow(()->new StudenIdNotFoundException("user not found, try again"));
 
     List<Student> result = Arrays.asList(student);
     model.addAttribute("students", result);
