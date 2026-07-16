@@ -142,7 +142,7 @@ public class StudentController {
         return studentService.studentServicesDeletePage();
     }
     @PostMapping("/DeleteActualStudent")
-    public String deleteActualStudent(@RequestParam int id)throws StudentNameNotFoundException {
+    public String deleteActualStudent(@RequestParam int id)throws StudentIdNotFoundException {
             return studentService.deleteActualStudent(id);
     }
 
