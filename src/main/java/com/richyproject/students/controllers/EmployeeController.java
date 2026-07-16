@@ -44,17 +44,11 @@ public class EmployeeController {
 
 
     @PostMapping("/DeleteActualEmployee")
-    public String deleteActualEmployee(@RequestParam int id,Model model){
-            try {
+    public String deleteActualEmployee(@RequestParam int id,Model model)throw EmployeeIdNotFoundException{
+            
                 return employeeService.deleteActualEmployeeServices(id);
-            }
-            catch(EmployeeNameNotFoundException e){
-
-                model.addAttribute("errorMessage",e.getMessage());
-                return "ErrorPage";
-
-
-            }
+            
+         
 
 
     }
