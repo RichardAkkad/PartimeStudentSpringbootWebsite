@@ -50,10 +50,10 @@ public class StudentService {
     public String studentServicesDeletePage(){
         return "DeleteStudentPage";
     }
-    public String deleteActualStudent(Integer id) throws StudentNameNotFoundException {
+    public String deleteActualStudent(Integer id) throws StudentIdNotFoundException {
 
 
-            Student student=studentRepository.findById(id).orElseThrow(()->new StudentNameNotFoundException("username not found please try again"));
+            Student student=studentRepository.findById(id).orElseThrow(()->new StudentIdNotFoundException("Id not found please try again"));
 
 //-----------------------------------------------------------------------------
 
