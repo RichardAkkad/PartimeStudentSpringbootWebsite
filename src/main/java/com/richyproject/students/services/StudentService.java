@@ -111,9 +111,9 @@ public class StudentService {
 
     public String averageGradeResults(String course,Model model)throws CourseNotFoundException {
 
-        List<Student> li=studentRepository.findAll();
+        List<Student> studentList=studentRepository.findAll();
 
-        OptionalDouble average=li.stream().filter(obj->obj.getCourse().equals(course)).mapToInt(Student::getGrade).average();
+        OptionalDouble average=studentList.stream().filter(obj->obj.getCourse().equals(course)).mapToInt(Student::getGrade).average();
 
         //"average" returns a OptionalDouble, but not a raw Double , if you want the raw double use method "getAsDouble" and cannot return a  Optional
         // or use "isPresent()" if the OptionalDOuble is empty
