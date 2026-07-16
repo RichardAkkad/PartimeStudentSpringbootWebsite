@@ -126,7 +126,7 @@ public class StudentController {
     }
 
     @GetMapping("/SearchStudentById")
-    public String studentIdResult(@RequestParam int id, Model model) throws StudentNameNotFoundException{
+    public String studentIdResult(@RequestParam int id, Model model) throws StudentIdNotFoundException{
             return studentService.studentSearchIdResultServices(id, model);
     }
     //******** WHY HAVE I ONLY ONE PART TO THIS?
