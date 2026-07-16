@@ -51,8 +51,8 @@ public class EmployeeService {//loadByUsername method, like the CustomUserDetail
 
 
 
-    public String deleteActualEmployeeServices(int id) throws EmployeeNameNotFoundException{
-      Employee employee=employeeRepository.findById(id).orElseThrow(()->new EmployeeNameNotFoundException("this id does not exist"));
+    public String deleteActualEmployeeServices(int id) throws EmployeeIdNotFoundException{
+      Employee employee=employeeRepository.findById(id).orElseThrow(()->new EmployeeIdNotFoundException("this id does not exist"));
         return "StudentDeletedSuccessfully";
 
     }
