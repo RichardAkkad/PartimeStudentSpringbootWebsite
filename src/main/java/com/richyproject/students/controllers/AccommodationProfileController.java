@@ -79,17 +79,10 @@ public class AccommodationProfileController {
 
     }
     @PostMapping("/DeleteAccommodationProfile")
-    public String deleteAccommodationProfile(@RequestParam Integer accommodationProfileId, Model model)throws StudentNameNotFoundException {
-        try{
+    public String deleteAccommodationProfile(@RequestParam Integer accommodationProfileId, Model model)throws StudentIdNotFoundException {
+       
             return accommodationProfileService.deleteAccommodationProfileServices(accommodationProfileId);
-        }
-        catch(Exception e){
-            String message=e.getMessage();
-            System.out.println(message);
-            model.addAttribute("ErrorMessage",message);
-            return "ErrorPage";
-
-        }
+       
     }
 
 
