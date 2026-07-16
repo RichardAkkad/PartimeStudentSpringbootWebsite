@@ -129,9 +129,9 @@ public class AccommodationProfileService {
 
         return "PageSavedSuccessfully";
     }
-           public String deleteAccommodationProfileServices(Integer accommodationProfileId)throws StudentNameNotFoundException{
+           public String deleteAccommodationProfileServices(Integer accommodationProfileId)throws StudentIdNotFoundException{
                if(!accommodationProfileRepository.existsById(accommodationProfileId)) {
-                   throw new StudentNameNotFoundException("studentId not found please try again");
+                   throw new StudentIdNotFoundException("studentId not found please try again");
 
                }
                    accommodationProfileRepository.deleteById(accommodationProfileId);
