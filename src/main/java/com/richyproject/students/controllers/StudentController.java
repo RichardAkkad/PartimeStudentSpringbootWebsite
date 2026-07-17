@@ -101,7 +101,7 @@ public class StudentController {
     }
 
     @GetMapping("AverageGradeResults")
-    public String averageGradeResults(@RequestParam String course, Model model) throws CourseNotFoundException {
+    public String averageGradeResults(@RequestParam String course, Model model) {
             return studentService.averageGradeResults(course, model);
 
     }
@@ -167,13 +167,6 @@ public class StudentController {
             System.out.println("Error deleting picture: " + e.getMessage());
         }
     }
-
-
-
-
-
-
-
 
         @GetMapping("/UpdateStudent")
         public String getupdateStudentPage(Model model){
@@ -243,3 +236,4 @@ public class StudentController {
 
 
     }
+
