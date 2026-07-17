@@ -34,6 +34,7 @@ public class StudentService {
 
 
     public String addStudentServices(){
+
         return "AddStudent";
 
     }
@@ -53,7 +54,7 @@ public class StudentService {
     public String deleteActualStudent(Integer id) throws StudentIdNotFoundException {
 
 
-            Student student=studentRepository.findById(id).orElseThrow(()->new StudentIdNotFoundException("Id not found please try again"));
+            Student student=studentRepository.findById(id).orElseThrow(()->new StudentIdNotFoundException("id not found please try again"));
 
 //-----------------------------------------------------------------------------
 
@@ -73,14 +74,12 @@ public class StudentService {
     }
 
     public String findAgefromServices(int age, Model model) {
-        List<Student> studentList = studentRepository.findAll();
 
-        Function<Student, String> lambVar = student -> String.valueOf(student.getId());
+        List<Student> studentAgeList = studentRepository.findByAgeLessThanEqual(age);
 
-        List<String> info = studentList.stream().filter(student  -> student.getAge() < age).map(Student::getId).map(String::valueOf).toList();
+        List<String> ageResults = studentAgeList.stream().map(Student::getId).map(String::valueOf).toList();
 
-
-        String message="the following id's are for the student's whos age is " + age + " and below is..... "+ String.join(", ",info);
+        String message="the following id's are for the student's whos age is " + age + " and below is..... "+ String.join(", ",ageResults);
 
         model.addAttribute("ageMessage", message);
 
@@ -92,15 +91,16 @@ public class StudentService {
 
     public String getAgeRangePercentageResultsServices(int age, Model model){
 
-        List<Student> studentList=studentRepository.findAll();
+        List<Student> studentAgeList=studentRepository.findByAgeLessThanEqual(age);
+
+        int studentCount=studentAgeList.size();
+        long totalCount=studentRepository.count();
+
+        double percentageResult=(double)studentCount/totalCount*100;
 
 
-        List<Integer> ageList =new ArrayList<>();
-        studentList.stream().filter(student->student.getAge()<=age).forEach(student->ageList.add(student.getAge()));
-
-        String message= ageList.isEmpty()?"unfortunately no students of that age "+age+" or less were found":(ageList.size()*100)/ studentList.size()+"% of the students are under the age of "+age;
-        //dont think there is a point having a ternary sentence here if (inside a try block as not possible to have a arithmetic exception), because if its empty which
-        //means ageLi.isEmpty size is zero so that takes care of the 0, therefore "ageLi.size()*100)/li.size()" cannot be "0/li.size()"
+        String message= studentAgeList.isEmpty()?"unfortunately no students of that age "+age+" or less were found":percentageResult+"% of the students are under the age of "+age;
+        //means ageList.isEmpty size is zero so that takes care of the 0, therefore cannot be "0/......."
 
 
         model.addAttribute("agePercentageMessage", message);//basicly "message" is assigned to the variable "agePercentageMessage", also wont need to convert it into a toString as its already a
@@ -111,14 +111,11 @@ public class StudentService {
 
     public String averageGradeResults(String course,Model model)throws CourseNotFoundException {
 
-        List<Student> studentList=studentRepository.findAll();
+        List<Student> studentList=studentRepository.findByCourse(course);
 
-        OptionalDouble average=studentList.stream().filter(obj->obj.getCourse().equals(course)).mapToInt(Student::getGrade).average();
+        double result= studentList.stream().map(Student::getGrade).mapToInt(Integer::intValue).sum()/(double)studentList.size();
 
-        //"average" returns a OptionalDouble, but not a raw Double , if you want the raw double use method "getAsDouble" and cannot return a  Optional
-        // or use "isPresent()" if the OptionalDOuble is empty
-        String message = "the average grade for " + course + " is " + average.orElseThrow(()->new CourseNotFoundException("no students found for that course"))
-        +"%";
+        String message = studentList.isEmpty()?"no students found on the course "+ course:"the average grade for this course is " + result +"%";
         model.addAttribute("averageMessage", message);//to String is called here implicitly on message(thymleaf invokes the toString method), but "message" is already a string which concatinated.
         return "AverageGradeResults";// if use a primitive then can use that instead to use this String message in th:text thymleaf it needs to be assigned to a variable in this case "averageMessage"
 
@@ -126,27 +123,23 @@ public class StudentService {
 }
 
 //----------------------------------------------------------
-public String searchForStudentServices(){
+    public String searchForStudentServices(){
     return "StudentSearchPage";
 }
-    
 
-public String studentSearchIdResultServices(int id,Model model) throws StudentIdNotFoundException{
+    public String studentSearchIdResultServices(int id,Model model) throws StudentIdNotFoundException{
 
-    model.addAttribute("students",studentRepository.findById(id).orElseThrow(()->new StudenIdNotFoundException("student id not found, please try again")));
+        model.addAttribute("student",studentRepository.findById(id).orElseThrow(()->new StudentIdNotFoundException("user not found, try again")));
 
-    return "StudentResults";
-}
+        return "StudentResults";
+    }
 
 
-    
 public String searchStudentByAgeRangeServices(String Course,int minAge, int maxAge,int minGrade, int maxGrade, Model model) {
-    List<Student> studentList = studentRepository.findAll()
-            .stream().filter(obj->obj.getAge() >= minAge && obj.getAge()<=maxAge).
-            filter(obj->obj.getGrade()>=minGrade && obj.getGrade()<=maxGrade).
-            filter(obj->obj.getCourse().equals(Course)).toList();
+    List<Student> studentList = studentRepository
+            .findByCourseAndAgeBetweenAndGradeBetween(Course, minAge, maxAge, minGrade, maxGrade);
 
-    model.addAttribute("students",studentList);
+    model.addAttribute("students", studentList);
     return "StudentResults";
 
 }
