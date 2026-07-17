@@ -21,18 +21,23 @@ import java.util.function.Function;
 
 @Service
 public class StudentService {
-    @Autowired
-    StudentRepository studentRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
-    @Autowired
-    AccommodationProfileRepository accommodationProfileRepository;
+    
+     private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AccommodationProfileRepository accommodationProfileRepository;
+    private final S3Service s3Service;
 
-//---------------------------
-    @Autowired
-    S3Service s3Service;
-//---------------------------
+
+    public StudentService(StudentRepository studentRepository,
+                          PasswordEncoder passwordEncoder,
+                          AccommodationProfileRepository accommodationProfileRepository,
+                          S3Service s3Service) {
+        this.studentRepository = studentRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.accommodationProfileRepository = accommodationProfileRepository;
+        this.s3Service = s3Service;
+    }
 
 
     public String addStudentServices(){
