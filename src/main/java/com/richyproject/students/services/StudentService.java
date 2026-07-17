@@ -1,5 +1,7 @@
 package com.richyproject.students.services;
 
+package com.richyproject.students.services;
+
 
 import com.richyproject.students.Enum.Role;
 import com.richyproject.students.exceptions.StudentIdNotFoundException;
@@ -109,7 +111,7 @@ public class StudentService {
 
     }
 
-    public String averageGradeResults(String course,Model model)throws CourseNotFoundException {
+    public String averageGradeResults(String course,Model model) {
 
         List<Student> studentList=studentRepository.findByCourse(course);
 
@@ -171,42 +173,6 @@ public String searchStudentByAgeRangeServices(String Course,int minAge, int maxA
         return "PageSavedSuccessfully";
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
 
 
 
