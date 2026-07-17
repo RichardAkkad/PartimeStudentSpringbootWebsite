@@ -22,16 +22,18 @@ import org.springframework.validation.BindingResult;
 @Controller
 public class StudentController {
 
-    @Autowired
-    StudentService studentService;
+     private final StudentService studentService;
+    private final StudentRepository studentRepository;
+    private final S3Service s3Service;
 
-    @Autowired
-    StudentRepository studentRepository;
-//-------------------------------
-    @Autowired
-    private S3Service s3Service;
-//---------------------------------
-    @GetMapping("/index")
+    public StudentController(StudentService studentService,
+                             StudentRepository studentRepository,
+                             S3Service s3Service) {
+        this.studentService = studentService;
+        this.studentRepository = studentRepository;
+        this.s3Service = s3Service;
+    }
+
     public String homePage(){
         return "index";
     }
