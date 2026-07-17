@@ -23,14 +23,11 @@ import org.springframework.validation.BindingResult;
 public class StudentController {
 
      private final StudentService studentService;
-    private final StudentRepository studentRepository;
     private final S3Service s3Service;
 
-    public StudentController(StudentService studentService,
-                             StudentRepository studentRepository,
-                             S3Service s3Service) {
+    public StudentController(StudentService studentService, S3Service s3Service) }
+
         this.studentService = studentService;
-        this.studentRepository = studentRepository;
         this.s3Service = s3Service;
     }
 
