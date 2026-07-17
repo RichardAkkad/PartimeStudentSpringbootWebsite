@@ -15,10 +15,11 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     Optional<Student> findByUsername(String username);
 
 
-    Optional<Student> findStudentByUsername(String username);
+    List<Student> findByAgeLessThanEqual(int age);
 
+    List<Student> findByCourse(String course);
 
-
-
+    List<Student> findByCourseAndAgeBetweenAndGradeBetween(String Course, int minAge, int maxAge, int minGrade, int maxGrade);
 
 }
+
