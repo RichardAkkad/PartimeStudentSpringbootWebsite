@@ -18,13 +18,14 @@ import java.util.*;
 @Service
 public class StudentAvailabilityService {
 
-    @Autowired
-    StudentWeeklyAvailabilityRepository studentWeeklyAvailabilityRepository;
-    @Autowired
-    StudentRepository studentRepository;
-    @Autowired
-    AccommodationProfileRepository accommodationProfileRepository;
+    public StudentAvailabilityService(studentWeeklyAvailabilityRepository,studentRepository,accommodationProfileRepository{
+                                  
+    this.studentWeeklyAvailabilityRepository=studentWeeklyAvailabilityRepository;
+    this.studentRepository=studentRepository;
+    this.accommodationProfileRepository=accommodationProfileRepository;
+    }
 
+    
     public String  saveStudentAvailabilityService(StudentWeeklyAvailability studentAvailability,UserDetails userDetails)
     {
         String studentUsername=userDetails.getUsername();
