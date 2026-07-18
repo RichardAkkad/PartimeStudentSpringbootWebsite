@@ -23,11 +23,14 @@ import java.util.function.Predicate;
 @Service
 public class AccommodationProfileService {
 
-    @Autowired
-    AccommodationProfileRepository accommodationProfileRepository;
+      private final AccommodationProfileRepository accommodationProfileRepository;
+    private final StudentRepository studentRepository;
 
-    @Autowired
-    StudentRepository studentRepository;
+    public AccomodationProfileService(AccommodationProfileRepository accommodationProfileRepository,StudentRepository studentRepository){
+        this.accommodationProfileRepository=accommodationProfileRepository;
+        this.studentRepository=studentRepository;
+    }
+
 
 
     public String AccommodationProfilePageServices() {
