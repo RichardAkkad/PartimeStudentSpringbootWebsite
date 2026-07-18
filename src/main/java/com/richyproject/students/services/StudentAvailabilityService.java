@@ -18,11 +18,16 @@ import java.util.*;
 @Service
 public class StudentAvailabilityService {
 
-    public StudentAvailabilityService(studentWeeklyAvailabilityRepository,studentRepository,accommodationProfileRepository{
-                                  
-    this.studentWeeklyAvailabilityRepository=studentWeeklyAvailabilityRepository;
-    this.studentRepository=studentRepository;
-    this.accommodationProfileRepository=accommodationProfileRepository;
+     private final StudentWeeklyAvailabilityRepository studentWeeklyAvailabilityRepository;
+    private final StudentRepository studentRepository;
+    private final AccommodationProfileRepository accommodationProfileRepository;
+
+    public StudentAvailabilityService(StudentWeeklyAvailabilityRepository studentWeeklyAvailabilityRepository,StudentRepository studentRepository,
+                                      AccommodationProfileRepository accommodationProfileRepository){
+
+        this.studentWeeklyAvailabilityRepository=studentWeeklyAvailabilityRepository;
+        this.studentRepository=studentRepository;
+        this.accommodationProfileRepository=accommodationProfileRepository;
     }
 
     
