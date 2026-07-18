@@ -40,37 +40,37 @@ public class StudentAvailabilityService {
         double searchStart=Double.parseDouble(startTime);
         double searchEnd=Double.parseDouble(endTime);
 
-        List<StudentWeeklyAvailability> studentWeeklyAvailabilityList=studentWeeklyAvailabilityRepository.findAll();//all of the students go in the list here
+        List<String> studentWeeklyAvailabilityResults =new ArrayList<>();//only certain students left in here now
 
-        List<String> studentWeeklyAvailabilityListOfResults =new ArrayList<>();//only certain students left in here now
+        checkSlots(day,searchStart,searchEnd, studentWeeklyAvailabilityResults);
 
-
-        for(StudentWeeklyAvailability studentAvailability:studentWeeklyAvailabilityList){
-                checkSlots(studentAvailability,day,searchStart,searchEnd,studentWeeklyAvailabilityList, studentWeeklyAvailabilityListOfResults);
-
-        }
-
-        model.addAttribute("students",studentWeeklyAvailabilityListOfResults);
+        model.addAttribute("students",studentWeeklyAvailabilityResults);
         return "StudentAvailabilitySearchResults";
 
     }
 
-    public  void  checkSlots(StudentWeeklyAvailability studentsAvailability,String day,double searchStart, double searchEnd,List<StudentWeeklyAvailability> studentWeeklyAvailabilityList, List<String>studentWeeklyAvailabilityListOfResults) {
+    public  void  checkSlots(String day,double searchStart, double searchEnd, List<String> studentWeeklyAvailabilityResults) {
 
-        boolean available =switch (day){
-                case "monday"->studentsAvailability.isMonday_available();
-                case "tuesday" -> studentsAvailability.isTuesday_available();
-                case "wednesday" -> studentsAvailability.isWednesday_available();
-                case "thursday" -> studentsAvailability.isThursday_available();
-                case "friday" -> studentsAvailability.isFriday_available();
-                case "saturday" -> studentsAvailability.isSaturday_available();
-                case "sunday" -> studentsAvailability.isSunday_available();
-                default->false;
+        List<StudentWeeklyAvailability> available = switch (day) {
+            case "monday" -> studentWeeklyAvailabilityRepository.findByMonday_AvailableTrue();
+            case "tuesday" -> studentWeeklyAvailabilityRepository.findByTuesday_AvailableTrue();
+            case "wednesday" -> studentWeeklyAvailabilityRepository.findByWednesday_AvailableTrue();
+            case "thursday" -> studentWeeklyAvailabilityRepository.findByThursday_AvailableTrue();
+            case "friday" -> studentWeeklyAvailabilityRepository.findByFriday_AvailableTrue();
+            case "saturday" -> studentWeeklyAvailabilityRepository.findBySaturday_AvailableTrue();
+            case "sunday" -> studentWeeklyAvailabilityRepository.findBySunday_AvailableTrue();
+            default -> List.of();
         };
-        if(available){
 
-                   checkTimeConstraints(studentsAvailability,day,searchStart,searchEnd,studentWeeklyAvailabilityList,studentWeeklyAvailabilityListOfResults);
+        if(!available.isEmpty()){
+
+            for(StudentWeeklyAvailability studentAvailability : available){
+                checkTimeConstraints(studentAvailability,day,searchStart,searchEnd,studentWeeklyAvailabilityResults);
+
+            }
+
         }
+
 
     }
     private record TimeSlot(String start, String end) {}
@@ -102,7 +102,7 @@ public class StudentAvailabilityService {
 
     }
 
-    public void  checkTimeConstraints(StudentWeeklyAvailability studentAvailability, String day,double searchStart,double searchEnd,List<StudentWeeklyAvailability> studentWeeklyAvailabilityList,List<String> studentWeeklyAvailabilityListOfResults){
+    public void  checkTimeConstraints(StudentWeeklyAvailability studentAvailability,String day,double searchStart,double searchEnd,List<String> studentWeeklyAvailabilityListOfResults){
                 List<TimeSlot> slots= weeklySlots(studentAvailability).get(day.toLowerCase());
                 boolean check=false;
                 for(TimeSlot slot:slots){
@@ -116,7 +116,7 @@ public class StudentAvailabilityService {
 
                 if(check) {
 
-                    Student findStudent=studentAvailability.getStudent();//retreiving produces a object a putting in the database is a "int" or a postgres "int" equivalent
+                    Student findStudent=studentAvailability.getStudent();//get the students and then get email of each student
                     AccommodationProfile accommodation=accommodationProfileRepository.findByStudent(findStudent);
                     studentWeeklyAvailabilityListOfResults.add(accommodation.getEmail());
                     }
