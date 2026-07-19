@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class EmployeeController {
 
-    @Autowired
-    EmployeeService employeeService;
+   private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService){
+        this.employeeService=employeeService;
+    }
 
 
     @GetMapping("/AddNewEmployeePage")
