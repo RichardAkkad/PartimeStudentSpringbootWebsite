@@ -15,8 +15,11 @@ import java.io.IOException;
 public class S3Controller {
 
 
-    @Autowired
-    private S3Service s3Service;
+   private final S3Service s3Service;
+
+    public S3Controller(S3Service s3Service){
+        this.s3Service=s3Service;
+    }
 
     /**
      * Upload student photo
