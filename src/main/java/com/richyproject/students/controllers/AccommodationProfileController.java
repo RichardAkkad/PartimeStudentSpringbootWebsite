@@ -19,7 +19,11 @@ import java.util.List;
 @Controller
 public class AccommodationProfileController {
 
-    @Autowired AccommodationProfileService accommodationProfileService;
+      private final AccomodationProfileService accommodationProfileService;
+
+    public AccommodationProfileController(AccomodationProfileService accommodationProfileService) {
+        this.accommodationProfileService=accommodationProfileService;
+    }
 
     @GetMapping("/AccommodationProfile")
     public String getAccommodationProfilePage(Model model){
