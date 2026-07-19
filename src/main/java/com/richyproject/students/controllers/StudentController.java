@@ -147,26 +147,6 @@ public class StudentController {
 
 
 
-
-
-
-
-    private void deleteProfilePicture(String filename) {
-        try {
-            String uploadDir = "C:/Users/richa/OneDrive/Desktop/student-images/";
-            File fileToDelete = new File(uploadDir + filename);
-
-            if (fileToDelete.exists()) {
-                boolean deleted = fileToDelete.delete();
-                System.out.println("Picture file deleted: " + deleted + " - " + filename);
-            } else {
-                System.out.println("Picture file not found: " + filename);
-            }
-        } catch (Exception e) {
-            System.out.println("Error deleting picture: " + e.getMessage());
-        }
-    }
-
         @GetMapping("/UpdateStudent")
         public String getupdateStudentPage(Model model){
             return studentService.updateStudentPageServices(model);
