@@ -33,9 +33,8 @@ public class StudentAvailabilityService {
     
     public String  saveStudentAvailabilityService(StudentWeeklyAvailability studentAvailability,UserDetails userDetails)
     {
-        String studentUsername=userDetails.getUsername();
-        Optional<Student> databaseStudent=studentRepository.findByUsername(studentUsername);
-        studentAvailability.setStudent(databaseStudent.get());
+     Student student= studentRepository.findByUsername(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("username not found"));
+        studentAvailability.setStudent(student);
         studentWeeklyAvailabilityRepository.save(studentAvailability);
 
         return "PageSavedSuccessfully";
