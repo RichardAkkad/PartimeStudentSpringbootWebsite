@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
     public class StudentAvailabilityController {
 
-        @Autowired
-        StudentAvailabilityService studentAvailabilityService;
+         private final StudentAvailabilityService studentAvailabilityService;
+
+        public StudentAvailabilityController(StudentAvailabilityService studentAvailabilityService){
+            this.studentAvailabilityService=studentAvailabilityService;
+        }
 
         @GetMapping("/StudentAvailabilityPage")
         public String getStudentAvailabilityPage(Model model){
