@@ -16,16 +16,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 
@@ -47,10 +50,25 @@ public class  SecurityConfigiration {
             OAuth2User user = delegate.loadUser(request);
             String registrationId = request.getClientRegistration().getRegistrationId();
             String nameAttribute = registrationId.equals("github") ? "id" : "email";
+
+            System.out.println("Attributes: " + user.getAttributes());
+
             return new DefaultOAuth2User(
                     List.of(new SimpleGrantedAuthority("ROLE_STUDENT")),
                     user.getAttributes(),
                     nameAttribute
+            );
+        };
+    }
+    @Bean
+    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        OidcUserService delegate = new OidcUserService();
+        return request -> {
+            OidcUser user = delegate.loadUser(request);
+            return new DefaultOidcUser(
+                    List.of(new SimpleGrantedAuthority("ROLE_STUDENT")),
+                    user.getIdToken(),
+                    user.getUserInfo()
             );
         };
     }
@@ -66,61 +84,54 @@ public class  SecurityConfigiration {
                         .requestMatchers("/DeleteStudentPage","/UpdateAccommodationProfile", "/AccommodationProfile", "/AgeRangePercentage", "/AgeRange", "/AverageGrades", "/FindRoommate", "StudentAvailabilityPage", "/AddStudentPage")
                         .hasAnyRole("TEACHER", "STUDENT")
                         .anyRequest()//.authenticated();
+
+                    
                         .permitAll();
             }
         };
-                Customizer<FormLoginConfigurer<HttpSecurity>> formLoginCustomizer = new Customizer<FormLoginConfigurer<HttpSecurity>>() {
-                    @Override
-                    public void customize(FormLoginConfigurer<HttpSecurity> httpSecurityFormLoginConfigurer) {
-                        httpSecurityFormLoginConfigurer
-                                .loginPage("/LoginPage") 
-                                //.failureUrl("/LoginPage?error=true") 
-                                .failureHandler(new CustomAuthenticationFailureHandler())
-                                .loginProcessingUrl("/login") 
-                                .permitAll();
-
-                    }
-
-                };
-
-
-        return http.authorizeHttpRequests(authorization)
-                .formLogin(formLoginCustomizer)
-                .exceptionHandling(ex -> ex
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.sendRedirect("/ErrorPage?error=access");
-                        }))
-                .csrf(obj -> obj.disable())
-                .build();
+        Customizer<FormLoginConfigurer<HttpSecurity>> formLoginCustomizer = new Customizer<FormLoginConfigurer<HttpSecurity>>() {
+            @Override
+            public void customize(FormLoginConfigurer<HttpSecurity>Configurer) {
+                Configurer
+                        .loginPage("/LoginPage")
+                        //.failureUrl("/LoginPage?error") 
+                        .failureHandler(new CustomAuthenticationFailureHandler())
+                        .loginProcessingUrl("/login") 
+                        .permitAll();
 
             }
-
-            }//When you don't specify loginProcessingUrl(), Spring Security defaults to using the same URL as your login page. so When you don't specify "loginProcessingUrl()"
-            // then GET /login → Shows the login form and POST /login → Processes the login (Spring Security handles automatically)
 
         };
         return http.authorizeHttpRequests(authorization).formLogin(formLoginCustomizer).exceptionHandling(ex ->
                 ex.accessDeniedHandler((request, response, accessDeniedException) -> {response.sendRedirect("/ErrorPage?error=access");}))
                 .csrf(obj -> obj.disable()).oauth2Login(oauth2 -> oauth2
-                .loginPage("/LoginPage").userInfoEndpoint(u -> u.userService(oauth2UserService()))
+                .loginPage("/LoginPage").userInfoEndpoint(u -> u
+                        .userService(oauth2UserService())
+                        .oidcUserService(oidcUserService())
+                )
         ).logout(logout->logout.logoutSuccessUrl("/index")).build();
 
-                CustomDaoAuthenticationProvider provider = new CustomDaoAuthenticationProvider();
-                provider.setUserDetailsService(userDetailsService);
-                provider.setPasswordEncoder(passwordEncoder);
+    }
 
-                return provider;
-              
+        @Bean
+        public AuthenticationProvider AuthenticationProvider (UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){//the object for this second parameter is coming from the @bean method Password at the top
 
-            return provider;// if a bean if just a object then i am assuming that its just then object "CustomDao......." with the reference type as Authentication Provider without a variable name, i think "provider is used as the variable name (from the authenticate method in the provider manager class)
+            CustomDaoAuthenticationProvider provider = new CustomDaoAuthenticationProvider();
+            provider.setUserDetailsService(userDetailsService);
+            provider.setPasswordEncoder(passwordEncoder);
+
+            return provider;
 
 
-//question why are we using "!this.passwordEncoder" in the additionalAuthenticationChecks method to call the matches method? surely we can just use autowired to retrieve
-            // bean and use that to call this matches method in the additional........... method?
+
         }
 
 
     }
+
+
+
+
 
 
 
