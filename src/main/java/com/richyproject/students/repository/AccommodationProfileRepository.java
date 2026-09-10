@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AccommodationProfileRepository extends JpaRepository<AccommodationProfile,Integer> {
 
         Optional<AccommodationProfile> findByStudentUsername(String username);
-        void deleteByStudentId(id);
+        void deleteByStudentId(Integer id);
 
 
                 // come back to check if below works
