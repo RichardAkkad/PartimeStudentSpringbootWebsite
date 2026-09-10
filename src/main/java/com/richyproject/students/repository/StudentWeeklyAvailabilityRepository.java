@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface StudentWeeklyAvailabilityRepository extends JpaRepository<StudentWeeklyAvailability,Long> {
-
+    void deleteByStudnentId(id);
     // come back to check if works
 
 
