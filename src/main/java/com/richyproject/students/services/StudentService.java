@@ -26,17 +26,18 @@ public class StudentService {
      private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Service s3Service;
-    private final AccommodationProfileRepository accommodationProfile;
-    private final StudentWeeklyAvailabilityRepository studentWeeklyAvailability;
+    private final AccommodationProfileRepository accommodationProfileRepository;
+    private final StudentWeeklyAvailabilityRepository studentWeeklyAvailabilityRepository;
 
 
     public StudentService(StudentRepository studentRepository,
                           PasswordEncoder passwordEncoder,
-                          S3Service s3Service, AccommodationProfileRepository accommodationProfile, StudentWeeklyAvailabilityRepository) {
+                          S3Service s3Service, AccommodationProfileRepository accommodationProfileRepository, StudentWeeklyAvailabilityRepository, studentWeeklyAvsilabilityRepository) {
         this.studentRepository = studentRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3Service = s3Service;
-        this.accommodationProfile=accommodationProfile;
+        this.accommodationProfileRepository=accommodationProfileRepository;
+        this.studentWeeklyAvailabilityRepository=studentWeeklyAvailbilityRepository;
     }
 
 
