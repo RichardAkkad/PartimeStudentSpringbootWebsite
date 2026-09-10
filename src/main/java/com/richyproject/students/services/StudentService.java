@@ -26,14 +26,17 @@ public class StudentService {
      private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Service s3Service;
+    private final AccommodationProfileRepository accommodationProfile;
+    private final StudentWeeklyAvailabilityRepository studentWeeklyAvailability;
 
 
     public StudentService(StudentRepository studentRepository,
                           PasswordEncoder passwordEncoder,
-                          S3Service s3Service) {
+                          S3Service s3Service, AccommodationProfileRepository accommodationProfile, StudentWeeklyAvailabilityRepository) {
         this.studentRepository = studentRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3Service = s3Service;
+        this.accommodationProfile=accommodationProfile;
     }
 
 
@@ -66,6 +69,8 @@ public class StudentService {
             String profilePicture = student.getProfilePicture();
 
             // Delete student from database
+            accommodationProfileRepository.deleteByStudentId(id);
+            studentWeeklyAvailability.deleteByStudentId(id);
             studentRepository.deleteById(id);
 
             // Delete the picture file from S3 if it exists
