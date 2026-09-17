@@ -59,6 +59,7 @@ public class StudentService {
     public String studentServicesDeletePage(){
         return "DeleteStudentPage";
     }
+    @Transactional
     public String deleteActualStudent(Integer id) throws StudentIdNotFoundException {
 
 
