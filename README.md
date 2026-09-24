@@ -11,8 +11,6 @@ Login Credentials:
 
 Student access — Username: tony Password: tony
 
-Employee access — Username: james Password: james
-
 Or login directly via Google or GitHub for Student access
 
 To search for a student or employee, simply enter their ID (e.g. 1, 2, etc.).
