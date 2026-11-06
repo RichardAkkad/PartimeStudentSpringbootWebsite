@@ -13,7 +13,7 @@ Student access — Username: tony Password: tony
 
 Or login directly via Google or GitHub for Student access
 
-To search for a student or employee, simply enter their ID (e.g. 1, 2, etc.).
+To search for a student or employee, simply enter their ID (e.g 2,3 etc.).
 
 What I Learnt & Next Steps
 
