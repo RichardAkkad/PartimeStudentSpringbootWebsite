@@ -13,7 +13,9 @@ Student access — Username: tony Password: tony
 
 Or login directly via Google or GitHub for Student access
 
-To search for a student or employee, simply enter their ID (e.g 2,5 etc.).
+To search for a student please enter ID  2,5,6 (as those are the students that I currently have stored in the database)
+To search for a student please enter ID  1,2,3 (as those are the employees that I currently have stored in the database)
+
 
 What I Learnt & Next Steps
 
