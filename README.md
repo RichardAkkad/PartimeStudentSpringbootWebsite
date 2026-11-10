@@ -9,7 +9,7 @@ The application includes full CRUD functionality — students can add (including
 Live Demo: http://ec2-13-40-31-169.eu-west-2.compute.amazonaws.com:5000
 Login Credentials:
 
-Student access — Username: tony Password: tony, or you can login directly via Google or GitHub for Student access
+Student access — you can login directly via Google or GitHub or use the Username: tony Password: tony for student access.
 
 To search for a student please enter ID  2,5,6 (as those are the students that I currently have stored in the database).
 To search for a Employee please enter ID  1,2,3 (as those are the employees that I currently have stored in the database).
