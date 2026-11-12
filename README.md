@@ -11,7 +11,7 @@ Login Credentials:
 
 Student access — you can login directly via Google or GitHub or use the Username: tony Password: tony for student access.
 
-To search for a student please enter ID  2,5,6 (as those are the students that I currently have stored in the database).
+To search for a student please enter ID  9,10,11,12,13 etc..... (as those are the students that I currently have stored in the database).
 To search for a Employee please enter ID  1,2,3 (as those are the employees that I currently have stored in the database).
 Please feel free to add a new student or a new employee by entering some random student or employee details.
 
