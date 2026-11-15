@@ -6,7 +6,7 @@ As a part-time evening student at Birkbeck University studying a Bsc in Maths an
 The core features allow students to search for other students who are on same or similar course who have the same free availability slots so a student can find study partner and find students with similar budgets and courses they could potentially live with, with results filtered to surface the most compatible matches using custom query methods. Students can then contact those people directly to arrange viewings, as well as track their own progress through the platform.
 The application includes full CRUD functionality — students can add (including uploading photos), update, and delete their profiles. It also includes strong Spring Security protocols with custom authentication, role-based access control to restrict sensitive operations, and OAuth2 login for Google and GitHub. Student profile images and data are stored using AWS S3, with the project deployed on an AWS EC2 instance.
 
-Live Demo: d2hmel40thvghm.cloudfront.net
+Live Demo: https://d2hmel40thvghm.cloudfront.net
 
 Login Credentials:
 Student access — you can login directly via Google or GitHub or use the Username: tony Password: tony for student access.
