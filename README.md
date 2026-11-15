@@ -7,8 +7,8 @@ The core features allow students to search for other students who are on same or
 The application includes full CRUD functionality — students can add (including uploading photos), update, and delete their profiles. It also includes strong Spring Security protocols with custom authentication, role-based access control to restrict sensitive operations, and OAuth2 login for Google and GitHub. Student profile images and data are stored using AWS S3, with the project deployed on an AWS EC2 instance.
 
 Live Demo: d2hmel40thvghm.cloudfront.net
-Login Credentials:
 
+Login Credentials:
 Student access — you can login directly via Google or GitHub or use the Username: tony Password: tony for student access.
 
 To search for a student please enter ID  9,10,11,12,13 etc..... (as those are the students that I currently have stored in the database).
