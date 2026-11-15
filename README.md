@@ -9,7 +9,10 @@ The application includes full CRUD functionality — students can add (including
 Live Demo: https://d2hmel40thvghm.cloudfront.net
 
 Login Credentials:
-Student access — you can login directly via Google or GitHub or use the Username: tony Password: tony for student access.
+**Student Access:** Sign in using Google or GitHub via OAuth2, or use the demo student credentials below:
+
+- **Username:** tony
+- **Password:** tony
 
 To search for a student please enter ID  9,10,11,12,13 etc..... (as those are the students that I currently have stored in the database).
 Please feel free to add a new student or a new employee by entering some random student or employee details.
