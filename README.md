@@ -27,6 +27,6 @@ Below is a screenshot of matching students with a percentage of how compatible t
 
 
 
-This was most challenging project I have undertaken but also the most rewarding. It required me to learn Java and Spring Boot from scratch, alongside a range of AWS concepts including EC2, S3, Elastic Beanstalk and security groups. I also had to develop a working knowledge of Linux and Git in order to manage and deploy the project effectively.
+This was most challenging project I have undertaken but also the most rewarding. It required me to learn Java and Spring Boot from scratch, alongside a range of AWS concepts including EC2, S3, and security groups. I also had to develop a working knowledge of Linux and Git in order to manage and deploy the project effectively.
 Although my background is in mathematics and statistics, I wanted to push myself beyond theoretical knowledge and learn how to actually build, deploy and put a full application together end to end. Taking a project from an idea all the way through to a live deployed application accessible on the web was something I was determined to achieve, and this project proved that I could do that.
 The most demanding aspect was Spring Security where I had to implement custom authentication, role-based access control and OAuth2 login required a significant amount of research and problem solving. Despite the difficulty, it was the part I found most rewarding, as it gave me a deep understanding of how real-world authentication systems are built and secured.
