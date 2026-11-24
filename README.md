@@ -11,6 +11,8 @@ Live Demo: https://d2hmel40thvghm.cloudfront.net
 Login Credentials:
 **Student Access:** Sign in using Google or GitHub via OAuth2, or use the demo student credentials below:
 
+Sample data only: The information shown below is mock data used for testing and display.
+
 - **Username:** tony
 - **Password:** tony
 
