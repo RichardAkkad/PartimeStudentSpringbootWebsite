@@ -16,7 +16,7 @@ Sample data only: The information shown below is mock data used for testing and 
 - **Username:** tony
 - **Password:** tony
 
-To search for a student please enter ID  9,10,11,12,13 etc..... (as those are the students that I currently have stored in the database).
+To search for a student please enter id's: 9,10,11,12,13 etc..... (as those are the students that I currently have stored in the database).
 Please feel free to add a new student or a new employee by entering some random student or employee details.
 
 What I Learnt & Next Steps
